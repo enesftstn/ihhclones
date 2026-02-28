@@ -7,10 +7,7 @@ export async function GET(request: Request) {
   try {
     const identifier = getRateLimitIdentifier(request)
     const allowed = await rateLimit(`campaigns:${identifier}`, 100, 60000)
-
-    if (!allowed) {
-      return NextResponse.json({ error: "Too many requests" }, { status: 429 })
-    }
+    if (!allowed) return NextResponse.json({ error: "Too many requests" }, { status: 429 })
 
     const { searchParams } = new URL(request.url)
     const featured = searchParams.get("featured")
@@ -28,7 +25,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ campaigns })
   } catch (error) {
-    console.error("[v0] Error fetching campaigns:", error)
+    console.error("[DB] Error fetching campaigns:", error)
     return NextResponse.json({ error: "Failed to fetch campaigns" }, { status: 500 })
   }
 }
@@ -36,7 +33,6 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     await requireAdmin()
-
     const body = await request.json()
     const { title, slug, subtitle, description, image_url, cta_label, cta_link, goal_amount, is_featured, is_active, sort_order } = body
 
@@ -48,10 +44,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, id: result.insertId })
   } catch (error) {
-    if (error instanceof Error && error.message === "Unauthorized") {
+    if (error instanceof Error && error.message === "Unauthorized")
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
-    console.error("[v0] Error creating campaign:", error)
+    console.error("[DB] Error creating campaign:", error)
     return NextResponse.json({ error: "Failed to create campaign" }, { status: 500 })
   }
 }

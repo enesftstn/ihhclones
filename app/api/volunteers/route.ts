@@ -1,46 +1,41 @@
 import { NextResponse } from "next/server"
-import { execute } from "@/lib/db"
-import { volunteerSchema } from "@/lib/validation"
+import { execute, query } from "@/lib/db"
+import { requireAdmin } from "@/lib/auth"
 import { rateLimit, getRateLimitIdentifier } from "@/lib/rate-limit"
 
 export async function POST(request: Request) {
   try {
     const identifier = getRateLimitIdentifier(request)
-    const allowed = await rateLimit(`volunteer:${identifier}`, 2, 60 * 60 * 1000)
-
-    if (!allowed) {
-      return NextResponse.json({ error: "Too many submissions. Please try again later." }, { status: 429 })
-    }
+    const allowed = await rateLimit(`volunteers:${identifier}`, 2, 3600000)
+    if (!allowed) return NextResponse.json({ error: "Too many requests" }, { status: 429 })
 
     const body = await request.json()
+    const { full_name, email, phone, country, city, skills, availability, message } = body
 
-    const mappedBody = {
-      name: body.fullName,
-      email: body.email,
-      phone: body.phone,
-      country: body.country,
-      city: body.city,
-      skills: body.skills,
-      availability: body.availability,
-      experience: body.message,
-    }
+    if (!full_name || !email)
+      return NextResponse.json({ error: "Name and email are required" }, { status: 400 })
 
-    const validation = volunteerSchema.safeParse(mappedBody)
-    if (!validation.success) {
-      return NextResponse.json({ error: "Invalid input", details: validation.error.errors }, { status: 400 })
-    }
-
-    const { name, email, phone, country, city, skills, availability, experience } = validation.data
-
-    // Note: volunteers table doesn't exist in the user's schema, so we store in contact_messages with a subject
     await execute(
-      "INSERT INTO contact_messages (full_name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)",
-      [name, email, phone || null, "Volunteer Application", `Country: ${country || ""}, City: ${city || ""}, Skills: ${skills || ""}, Availability: ${availability || ""}, Experience: ${experience || ""}`]
+      "INSERT INTO volunteers (full_name, email, phone, country, city, skills, availability, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      [full_name, email, phone || null, country || null, city || null, skills || null, availability || null, message || null]
     )
 
-    return NextResponse.json({ success: true, message: "Volunteer application submitted" })
+    return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("[v0] Error creating volunteer:", error)
-    return NextResponse.json({ error: "Failed to submit volunteer application" }, { status: 500 })
+    console.error("[DB] Error saving volunteer:", error)
+    return NextResponse.json({ error: "Failed to submit" }, { status: 500 })
+  }
+}
+
+export async function GET(request: Request) {
+  try {
+    await requireAdmin()
+    const volunteers = await query("SELECT * FROM volunteers ORDER BY created_at DESC")
+    return NextResponse.json({ volunteers })
+  } catch (error) {
+    if (error instanceof Error && error.message === "Unauthorized")
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    console.error("[DB] Error fetching volunteers:", error)
+    return NextResponse.json({ error: "Failed to fetch volunteers" }, { status: 500 })
   }
 }

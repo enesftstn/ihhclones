@@ -31,6 +31,6 @@ export async function execute(sql: string, params: any[] = []) {
 export { pool }
 
 export function handleDbError(error: unknown) {
-  console.error("[v0] Database error:", error)
+  console.error("[DB] Database error:", error)
   throw new Error("Database operation failed")
 }

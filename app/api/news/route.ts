@@ -7,10 +7,7 @@ export async function GET(request: Request) {
   try {
     const identifier = getRateLimitIdentifier(request)
     const allowed = await rateLimit(`news:${identifier}`, 100, 60000)
-
-    if (!allowed) {
-      return NextResponse.json({ error: "Too many requests" }, { status: 429 })
-    }
+    if (!allowed) return NextResponse.json({ error: "Too many requests" }, { status: 429 })
 
     const { searchParams } = new URL(request.url)
     const limit = Math.min(Number.parseInt(searchParams.get("limit") || "10"), 100)
@@ -19,19 +16,25 @@ export async function GET(request: Request) {
     let news
     if (categoryId) {
       news = await query(
-        "SELECT n.*, c.name as category_name, u.full_name as author_name FROM news n LEFT JOIN categories c ON n.category_id = c.id LEFT JOIN users u ON n.author_id = u.id WHERE n.is_published = 1 AND n.category_id = ? ORDER BY n.published_at DESC LIMIT ?",
-        [Number.parseInt(categoryId), limit]
+        `SELECT n.*, c.name_en as category_name FROM news n
+         LEFT JOIN categories c ON n.category_id = c.id
+         WHERE n.is_published = 1 AND n.category_id = ?
+         ORDER BY n.published_at DESC LIMIT ?`,
+        [Number(categoryId), limit]
       )
     } else {
       news = await query(
-        "SELECT n.*, c.name as category_name, u.full_name as author_name FROM news n LEFT JOIN categories c ON n.category_id = c.id LEFT JOIN users u ON n.author_id = u.id WHERE n.is_published = 1 ORDER BY n.published_at DESC LIMIT ?",
+        `SELECT n.*, c.name_en as category_name FROM news n
+         LEFT JOIN categories c ON n.category_id = c.id
+         WHERE n.is_published = 1
+         ORDER BY n.published_at DESC LIMIT ?`,
         [limit]
       )
     }
 
     return NextResponse.json({ news })
   } catch (error) {
-    console.error("[v0] Error fetching news:", error)
+    console.error("[DB] Error fetching news:", error)
     return NextResponse.json({ error: "Failed to fetch news" }, { status: 500 })
   }
 }
@@ -39,7 +42,6 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     await requireAdmin()
-
     const body = await request.json()
     const { title, slug, excerpt, content, image_url, category_id, is_published } = body
 
@@ -51,10 +53,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, id: result.insertId })
   } catch (error) {
-    if (error instanceof Error && error.message === "Unauthorized") {
+    if (error instanceof Error && error.message === "Unauthorized")
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
-    console.error("[v0] Error creating news:", error)
+    console.error("[DB] Error creating news:", error)
     return NextResponse.json({ error: "Failed to create news" }, { status: 500 })
   }
 }

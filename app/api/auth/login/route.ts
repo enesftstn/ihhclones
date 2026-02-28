@@ -1,41 +1,50 @@
 import { NextResponse } from "next/server"
-import { authenticateUser, createSession } from "@/lib/auth"
-import { loginSchema } from "@/lib/validation"
+import { queryOne, execute } from "@/lib/db"
+import { SignJWT } from "jose"
+import bcrypt from "bcryptjs"
 import { rateLimit, getRateLimitIdentifier } from "@/lib/rate-limit"
+
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "change-this-in-production")
 
 export async function POST(request: Request) {
   try {
-    // Rate limiting
     const identifier = getRateLimitIdentifier(request)
-    const allowed = await rateLimit(`login:${identifier}`, 5, 15 * 60 * 1000) // 5 attempts per 15 minutes
-
-    if (!allowed) {
-      return NextResponse.json({ error: "Too many login attempts. Please try again later." }, { status: 429 })
-    }
+    const allowed = await rateLimit(`login:${identifier}`, 5, 900000)
+    if (!allowed) return NextResponse.json({ error: "Too many login attempts" }, { status: 429 })
 
     const body = await request.json()
+    const { email, password } = body
 
-    // Validate input
-    const validation = loginSchema.safeParse(body)
-    if (!validation.success) {
-      return NextResponse.json({ error: "Invalid input", details: validation.error.errors }, { status: 400 })
-    }
+    if (!email || !password)
+      return NextResponse.json({ error: "Email and password required" }, { status: 400 })
 
-    const { email, password } = validation.data
+    const user = await queryOne<any>(
+      "SELECT * FROM admin_users WHERE email = ? AND is_active = 1",
+      [email]
+    )
 
-    // Authenticate user
-    const user = await authenticateUser(email, password)
+    if (!user || !(await bcrypt.compare(password, user.password_hash)))
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
 
-    if (!user) {
-      return NextResponse.json({ error: "Invalid email or password" }, { status: 401 })
-    }
+    await execute("UPDATE admin_users SET last_login = NOW() WHERE id = ?", [user.id])
 
-    // Create session
-    await createSession(user.userId, user.email, user.role)
+    const token = await new SignJWT({ userId: user.id, email: user.email, role: user.role })
+      .setProtectedHeader({ alg: "HS256" })
+      .setExpirationTime("7d")
+      .sign(JWT_SECRET)
 
-    return NextResponse.json({ success: true, user: { email: user.email, role: user.role } })
+    const response = NextResponse.json({ success: true, user: { email: user.email, name: user.full_name, role: user.role } })
+    response.cookies.set("session", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7,
+      path: "/",
+    })
+
+    return response
   } catch (error) {
-    console.error("[v0] Login error:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    console.error("[DB] Login error:", error)
+    return NextResponse.json({ error: "Login failed" }, { status: 500 })
   }
 }

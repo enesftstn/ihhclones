@@ -1,40 +1,40 @@
 import { NextResponse } from "next/server"
-import { query, execute } from "@/lib/db"
-import { newsletterSchema } from "@/lib/validation"
+import { execute, query } from "@/lib/db"
+import { requireAdmin } from "@/lib/auth"
 import { rateLimit, getRateLimitIdentifier } from "@/lib/rate-limit"
 
 export async function POST(request: Request) {
   try {
     const identifier = getRateLimitIdentifier(request)
-    const allowed = await rateLimit(`newsletter:${identifier}`, 5, 60 * 60 * 1000)
-
-    if (!allowed) {
-      return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 })
-    }
+    const allowed = await rateLimit(`newsletter:${identifier}`, 5, 3600000)
+    if (!allowed) return NextResponse.json({ error: "Too many requests" }, { status: 429 })
 
     const body = await request.json()
+    const { email } = body
 
-    const validation = newsletterSchema.safeParse(body)
-    if (!validation.success) {
-      return NextResponse.json({ error: "Invalid email address", details: validation.error.errors }, { status: 400 })
-    }
-
-    const { email } = validation.data
-
-    const existing = await query("SELECT id FROM newsletter_subscribers WHERE email = ?", [email])
-
-    if (existing.length > 0) {
-      return NextResponse.json({ message: "Already subscribed" }, { status: 200 })
-    }
+    if (!email) return NextResponse.json({ error: "Email required" }, { status: 400 })
 
     await execute(
-      "INSERT INTO newsletter_subscribers (email) VALUES (?)",
+      "INSERT INTO newsletter_subscribers (email) VALUES (?) ON DUPLICATE KEY UPDATE status = 'subscribed'",
       [email]
     )
 
-    return NextResponse.json({ success: true, message: "Successfully subscribed" })
+    return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("[v0] Newsletter subscription error:", error)
+    console.error("[DB] Error subscribing:", error)
     return NextResponse.json({ error: "Failed to subscribe" }, { status: 500 })
+  }
+}
+
+export async function GET(request: Request) {
+  try {
+    await requireAdmin()
+    const subscribers = await query("SELECT * FROM newsletter_subscribers ORDER BY subscribed_at DESC")
+    return NextResponse.json({ subscribers })
+  } catch (error) {
+    if (error instanceof Error && error.message === "Unauthorized")
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    console.error("[DB] Error fetching subscribers:", error)
+    return NextResponse.json({ error: "Failed to fetch subscribers" }, { status: 500 })
   }
 }

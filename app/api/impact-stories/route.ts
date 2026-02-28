@@ -6,10 +6,7 @@ export async function GET(request: Request) {
   try {
     const identifier = getRateLimitIdentifier(request)
     const allowed = await rateLimit(`stories:${identifier}`, 100, 60000)
-
-    if (!allowed) {
-      return NextResponse.json({ error: "Too many requests" }, { status: 429 })
-    }
+    if (!allowed) return NextResponse.json({ error: "Too many requests" }, { status: 429 })
 
     const { searchParams } = new URL(request.url)
     const featured = searchParams.get("featured")
@@ -27,7 +24,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ stories })
   } catch (error) {
-    console.error("[v0] Error fetching stories:", error)
+    console.error("[DB] Error fetching stories:", error)
     return NextResponse.json({ error: "Failed to fetch stories" }, { status: 500 })
   }
 }
