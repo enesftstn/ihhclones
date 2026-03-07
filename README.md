@@ -71,8 +71,7 @@ Execute SQL scripts in order:
 
 ### Default Admin Credentials
 
-- **Email**: admin@hoprelief.org
-- **Password**: Admin123!
+
 
 **⚠️ Change these credentials immediately in production!**
 
