@@ -25,3 +25,26 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+/.vs
+/.vs/ihhclones
+/.vs/ihhclones/config
+/.vs/ihhclones/config/applicationhost.config
+/.vs/ihhclones/CopilotIndices/17.14.1231.31060
+/.vs/ihhclones/CopilotIndices/17.14.1231.31060/CodeChunks.db
+/.vs/ihhclones/CopilotIndices/17.14.1231.31060/CodeChunks.db-shm
+/.vs/ihhclones/CopilotIndices/17.14.1231.31060/CodeChunks.db-wal
+/.vs/ihhclones/CopilotIndices/17.14.1231.31060/SemanticSymbols.db
+/.vs/ihhclones/CopilotIndices/17.14.1231.31060/SemanticSymbols.db-shm
+/.vs/ihhclones/CopilotIndices/17.14.1231.31060/SemanticSymbols.db-wal
+/.vs/ihhclones/FileContentIndex
+/.vs/ihhclones/FileContentIndex/1fe547af-3931-49e5-9a8c-98f832fdf08e.vsidx
+/.vs/ihhclones/FileContentIndex/244ea7e7-8bb0-4eb6-9ba7-67c93bbbe027.vsidx
+/.vs/ihhclones/FileContentIndex/aa710558-5d88-41c8-82db-fe82ac95b330.vsidx
+/.vs/ihhclones/FileContentIndex/e9fe3000-3de2-4fd7-9816-ea36abe70f7e.vsidx
+/.vs/ihhclones/v17
+/.vs/ihhclones/v17/.wsuo
+/.vs/ihhclones/v17/DocumentLayout.backup.json
+/.vs/ihhclones/v17/DocumentLayout.json
+/.vs/slnx.sqlite
+/.vs/slnx.sqlite-journal
+/.vs/VSWorkspaceState.json
