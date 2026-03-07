@@ -8,10 +8,10 @@ export async function GET(
     { params }: { params: { id: string } }
 ) {
     try {
-        // ID'yi sayýya çeviriyoruz
+        // ID'yi sayÃ½ya Ã§eviriyoruz
         const campaignId = parseInt(params.id);
 
-        // Drizzle ile sorgu atýyoruz
+        // Drizzle ile sorgu atÃ½yoruz
         const result = await db
             .select()
             .from(campaigns)
@@ -19,13 +19,13 @@ export async function GET(
             .limit(1);
 
         if (result.length === 0) {
-            return NextResponse.json({ error: "Kampanya bulunamadý" }, { status: 404 });
+            return NextResponse.json({ error: "Kampanya bulunamadÃ½" }, { status: 404 });
         }
 
-        // Tek bir kampanya objesi döndürüyoruz
+        // Tek bir kampanya objesi dÃ¶ndÃ¼rÃ¼yoruz
         return NextResponse.json({ campaign: result[0] });
     } catch (error) {
         console.error("API Error:", error);
-        return NextResponse.json({ error: "Sunucu hatasý" }, { status: 500 });
+        return NextResponse.json({ error: "Sunucu hatasÃ½" }, { status: 500 });
     }
 }

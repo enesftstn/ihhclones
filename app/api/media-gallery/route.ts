@@ -10,13 +10,12 @@ export async function GET(request: NextRequest) {
     let media
     if (type) {
       media = await query(
-        "SELECT * FROM media WHERE file_type LIKE ? ORDER BY created_at DESC LIMIT ?",
-        [`${type}%`, limit]
+        `SELECT * FROM media WHERE file_type LIKE ? ORDER BY created_at DESC LIMIT ${limit}`,
+        [`${type}%`]
       )
     } else {
       media = await query(
-        "SELECT * FROM media ORDER BY created_at DESC LIMIT ?",
-        [limit]
+        `SELECT * FROM media ORDER BY created_at DESC LIMIT ${limit}`
       )
     }
 

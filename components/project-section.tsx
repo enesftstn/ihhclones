@@ -70,12 +70,12 @@ export function ProjectSection() {
                       <div>
                         <span className="text-2xl font-bold text-foreground">
                           {project.currency}
-                          {project.raised.toLocaleString()}
+                          {project.raised.toLocaleString("en-US")}
                         </span>
                         <span className="text-sm text-muted-foreground">
                           {" "}
                           / {project.currency}
-                          {project.goal.toLocaleString()}
+                          {project.goal.toLocaleString("en-US")}
                         </span>
                       </div>
                       <span className="text-lg font-semibold text-accent">{percentage.toFixed(2)}%</span>
@@ -85,7 +85,7 @@ export function ProjectSection() {
                   <div className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
                     <Users className="h-4 w-4" />
                     <span>
-                      {project.supporters.toLocaleString()}{" "}
+                      {project.supporters.toLocaleString("en-US")}{" "}
                       {language === "tr" ? "kişi bu projeyi destekledi" : "people supported this project"}
                     </span>
                   </div>

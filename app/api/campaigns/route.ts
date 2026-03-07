@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        // Tüm aktif kampanyalarý en yeni eklenenden baþlayarak getiriyoruz
+        // TÃ¼m aktif kampanyalarÃ½ en yeni eklenenden baÃ¾layarak getiriyoruz
         const allCampaigns = await db
             .select()
             .from(campaigns)
@@ -15,6 +15,6 @@ export async function GET() {
         return NextResponse.json({ campaigns: allCampaigns });
     } catch (error) {
         console.error("API Error (All Campaigns):", error);
-        return NextResponse.json({ error: "Kampanyalar yüklenemedi" }, { status: 500 });
+        return NextResponse.json({ error: "Kampanyalar yÃ¼klenemedi" }, { status: 500 });
     }
 }
