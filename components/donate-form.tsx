@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Heart, Check } from "lucide-react"
-import { StripeCheckout } from "./stripe-checkout"
+
 
 export default function DonateForm() {
   const { language } = useLanguage()
