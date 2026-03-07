@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { CheckCircle2, Heart } from "lucide-react"
 import Link from "next/link"
-import { getSessionStatus } from "@/app/actions/stripe"
+
 
 export default function DonationSuccessPage() {
   const { language } = useLanguage()
