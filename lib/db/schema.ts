@@ -8,7 +8,6 @@ import {
     timestamp,
     int,
     json,
-    integer,
     datetime
 } from "drizzle-orm/mysql-core";
 
@@ -157,7 +156,7 @@ export const auditLogs = mysqlTable("audit_logs", {
     action: varchar("action", { length: 100 }).notNull(),
     entityType: varchar("entity_type", { length: 50 }),
     entityId: int("entity_id"),
-    changes: json("changes"), // MySQL JSON tipi
+    changes: json("changes"),
     ipAddress: varchar("ip_address", { length: 45 }),
     userAgent: text("user_agent"),
     createdAt: timestamp("created_at").defaultNow(),
@@ -221,7 +220,7 @@ export const blogPosts = mysqlTable("blog_posts", {
     featuredImage: text("featured_image"),
     author: varchar("author", { length: 100 }),
     category: varchar("category", { length: 100 }),
-    tags: text("tags"), // MySQL'de array olmadýðý için virgülle ayrýlmýþ string tutulur
+    tags: text("tags"),
     viewCount: int("view_count").default(0),
     isPublished: boolean("is_published").default(false),
     publishedAt: timestamp("published_at"),
