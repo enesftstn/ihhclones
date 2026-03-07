@@ -14,9 +14,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     let campaigns
 
     if (!isNaN(numId)) {
-      campaigns = await query("SELECT * FROM campaigns WHERE id = ? AND status = 'active'", [numId])
+      campaigns = await query("SELECT * FROM campaigns WHERE id = ? AND is_active = 1", [numId])
     } else {
-      campaigns = await query("SELECT * FROM campaigns WHERE slug = ? AND status = 'active'", [id])
+      campaigns = await query("SELECT * FROM campaigns WHERE slug = ? AND is_active = 1", [id])
     }
 
     if (campaigns.length === 0)
@@ -34,12 +34,12 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     await requireAdmin()
     const { id } = await params
     const body = await request.json()
-    const { title_en, title_ar, title_tr, slug, description_en, short_description_en, featured_image, goal_amount, is_featured, is_urgent, status } = body
+    const { title, slug, subtitle, description, image_url, cta_label, cta_link, goal_amount, is_featured, is_active, sort_order } = body
 
     await execute(
-      `UPDATE campaigns SET title_en=?, title_ar=?, title_tr=?, slug=?, description_en=?, short_description_en=?, featured_image=?, goal_amount=?, is_featured=?, is_urgent=?, status=?, updated_at=NOW()
+      `UPDATE campaigns SET title=?, slug=?, subtitle=?, description=?, image_url=?, cta_label=?, cta_link=?, goal_amount=?, is_featured=?, is_active=?, sort_order=?, updated_at=NOW()
        WHERE id=?`,
-      [title_en, title_ar || null, title_tr || null, slug, description_en || null, short_description_en || null, featured_image || null, goal_amount || 0, is_featured ? 1 : 0, is_urgent ? 1 : 0, status || 'draft', Number(id)]
+      [title, slug, subtitle || null, description || null, image_url || null, cta_label || 'Donate', cta_link || null, goal_amount || 0, is_featured ? 1 : 0, is_active !== false ? 1 : 0, sort_order || 0, Number(id)]
     )
 
     return NextResponse.json({ success: true })

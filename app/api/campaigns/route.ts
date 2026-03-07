@@ -15,11 +15,11 @@ export async function GET(request: Request) {
     let campaigns
     if (featured === "true") {
       campaigns = await query(
-        "SELECT * FROM campaigns WHERE status = 'active' AND is_featured = 1 ORDER BY created_at DESC"
+        "SELECT * FROM campaigns WHERE is_active = 1 AND is_featured = 1 ORDER BY sort_order ASC, created_at DESC"
       )
     } else {
       campaigns = await query(
-        "SELECT * FROM campaigns WHERE status = 'active' ORDER BY created_at DESC"
+        "SELECT * FROM campaigns WHERE is_active = 1 ORDER BY sort_order ASC, created_at DESC"
       )
     }
 
@@ -34,12 +34,12 @@ export async function POST(request: Request) {
   try {
     await requireAdmin()
     const body = await request.json()
-    const { title_en, title_ar, title_tr, slug, description_en, short_description_en, featured_image, goal_amount, is_featured, is_urgent, status } = body
+    const { title, slug, subtitle, description, image_url, cta_label, cta_link, goal_amount, is_featured, is_active, sort_order } = body
 
     const result = await execute(
-      `INSERT INTO campaigns (title_en, title_ar, title_tr, slug, description_en, short_description_en, featured_image, goal_amount, is_featured, is_urgent, status)
+      `INSERT INTO campaigns (title, slug, subtitle, description, image_url, cta_label, cta_link, goal_amount, is_featured, is_active, sort_order)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [title_en, title_ar || null, title_tr || null, slug, description_en || null, short_description_en || null, featured_image || null, goal_amount || 0, is_featured ? 1 : 0, is_urgent ? 1 : 0, status || 'draft']
+      [title, slug, subtitle || null, description || null, image_url || null, cta_label || 'Donate', cta_link || null, goal_amount || 0, is_featured ? 1 : 0, is_active !== false ? 1 : 0, sort_order || 0]
     )
 
     return NextResponse.json({ success: true, id: result.insertId })
