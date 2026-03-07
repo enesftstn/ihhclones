@@ -1,5 +1,5 @@
 import mysql from "mysql2/promise";
-import { drizzle } from "drizzle-orm/mysql2"; // Bunu ekledik
+import { drizzle } from "drizzle-orm/mysql2";
 
 const pool = mysql.createPool({
     host: process.env.MYSQL_HOST || "tr-c367d0.hosting.net.tr",
@@ -14,10 +14,10 @@ const pool = mysql.createPool({
     charset: "utf8mb4",
 });
 
-// Drizzle ORM instance - Hata veren 'db' exportu tam olarak bu:
+// Drizzle ORM instance
 export const db = drizzle(pool);
 
-// Mevcut fonksiyonlarýn kalsýn (hata vermemesi için):
+// Helper functions for raw SQL if needed
 export async function query<T = any>(sql: string, params: any[] = []): Promise<T[]> {
     const [rows] = await pool.execute(sql, params);
     return rows as T[];
