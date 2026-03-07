@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 
     if (slug) {
       const posts = await query(
-        "SELECT n.*, c.name as category_name, u.full_name as author_name FROM news n LEFT JOIN categories c ON n.category_id = c.id LEFT JOIN users u ON n.author_id = u.id WHERE n.slug = ? AND n.is_published = 1",
+        "SELECT n.*, c.name_en as category_name, u.full_name as author_name FROM news n LEFT JOIN categories c ON n.category_id = c.id LEFT JOIN users u ON n.author_id = u.id WHERE n.slug = ? AND n.is_published = 1",
         [slug]
       )
 
@@ -29,14 +29,13 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: "Post not found" }, { status: 404 })
       }
 
-      await execute("UPDATE news SET view_count = view_count + 1 WHERE slug = ?", [slug])
+      await execute("UPDATE news SET views_count = views_count + 1 WHERE slug = ?", [slug])
 
       return NextResponse.json(posts[0])
     }
 
     const posts = await query(
-      "SELECT n.*, c.name as category_name, u.full_name as author_name FROM news n LEFT JOIN categories c ON n.category_id = c.id LEFT JOIN users u ON n.author_id = u.id WHERE n.is_published = 1 ORDER BY n.published_at DESC LIMIT ?",
-      [limit]
+      `SELECT n.*, c.name_en as category_name, u.full_name as author_name FROM news n LEFT JOIN categories c ON n.category_id = c.id LEFT JOIN users u ON n.author_id = u.id WHERE n.is_published = 1 ORDER BY n.published_at DESC LIMIT ${limit}`
     )
 
     return NextResponse.json(posts)

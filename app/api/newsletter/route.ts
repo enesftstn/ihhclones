@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     if (!email) return NextResponse.json({ error: "Email required" }, { status: 400 })
 
     await execute(
-      "INSERT INTO newsletter_subscribers (email) VALUES (?) ON DUPLICATE KEY UPDATE status = 'subscribed'",
+      "INSERT INTO newsletter_subscribers (email) VALUES (?) ON DUPLICATE KEY UPDATE is_active = 1",
       [email]
     )
 

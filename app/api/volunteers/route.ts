@@ -16,8 +16,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Name and email are required" }, { status: 400 })
 
     await execute(
-      "INSERT INTO volunteers (full_name, email, phone, country, city, skills, availability, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-      [full_name, email, phone || null, country || null, city || null, skills || null, availability || null, message || null]
+      "INSERT INTO volunteers (full_name, email, phone, country, city, skills, availability, motivation) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      [full_name, email, phone || null, country || null, city || null, skills ? JSON.stringify(skills) : null, availability || null, message || null]
     )
 
     return NextResponse.json({ success: true })
