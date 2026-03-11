@@ -14,11 +14,11 @@ export async function GET(request: Request) {
     let stories
     if (featured === "true") {
       stories = await query(
-        "SELECT * FROM impact_stories WHERE created_at IS NOT NULL AND is_featured = 1 ORDER BY published_at DESC"
+        "SELECT * FROM impact_stories WHERE created_at IS NOT NULL ORDER BY created_at DESC LIMIT 4"
       )
     } else {
       stories = await query(
-        "SELECT * FROM impact_stories WHERE created_at IS NOT NULL ORDER BY published_at DESC"
+        "SELECT * FROM impact_stories WHERE created_at IS NOT NULL ORDER BY created_at DESC"
       )
     }
 
