@@ -19,16 +19,15 @@ export async function GET(request: Request) {
         `SELECT n.*, c.name_en as category_name FROM news n
          LEFT JOIN categories c ON n.category_id = c.id
          WHERE n.is_published = 1 AND n.category_id = ?
-         ORDER BY n.published_at DESC LIMIT ?`,
-        [Number(categoryId), limit]
+         ORDER BY n.published_at DESC LIMIT ${limit}`,
+        [Number(categoryId)]
       )
     } else {
       news = await query(
         `SELECT n.*, c.name_en as category_name FROM news n
          LEFT JOIN categories c ON n.category_id = c.id
          WHERE n.is_published = 1
-         ORDER BY n.published_at DESC LIMIT ?`,
-        [limit]
+         ORDER BY n.published_at DESC LIMIT ${limit}`
       )
     }
 
@@ -43,12 +42,12 @@ export async function POST(request: Request) {
   try {
     await requireAdmin()
     const body = await request.json()
-    const { title, slug, excerpt, content, image_url, category_id, is_published } = body
+    const { title_en, title_ar, title_tr, slug, excerpt_en, content_en, featured_image, category_id, is_published, is_featured } = body
 
     const result = await execute(
-      `INSERT INTO news (title, slug, excerpt, content, image_url, category_id, is_published, published_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [title, slug, excerpt || null, content, image_url || null, category_id || null, is_published ? 1 : 0, is_published ? new Date() : null]
+      `INSERT INTO news (title_en, title_ar, title_tr, slug, excerpt_en, content_en, featured_image, category_id, is_published, is_featured, published_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [title_en, title_ar || null, title_tr || null, slug, excerpt_en || null, content_en, featured_image || null, category_id || null, is_published ? 1 : 0, is_featured ? 1 : 0, is_published ? new Date() : null]
     )
 
     return NextResponse.json({ success: true, id: result.insertId })

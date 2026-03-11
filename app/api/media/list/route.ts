@@ -19,13 +19,12 @@ export async function GET(request: Request) {
     let media
     if (fileType) {
       media = await query(
-        "SELECT * FROM media WHERE file_type LIKE ? ORDER BY created_at DESC LIMIT ? OFFSET ?",
-        [`${fileType}%`, limit, offset]
+        `SELECT * FROM media WHERE file_type LIKE ? ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`,
+        [`${fileType}%`]
       )
     } else {
       media = await query(
-        "SELECT * FROM media ORDER BY created_at DESC LIMIT ? OFFSET ?",
-        [limit, offset]
+        `SELECT * FROM media ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`
       )
     }
 

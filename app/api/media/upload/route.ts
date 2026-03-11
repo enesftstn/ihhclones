@@ -32,8 +32,8 @@ export async function POST(request: NextRequest) {
     })
 
     const result = await execute(
-      "INSERT INTO media (file_name, file_path, file_type, file_size, alt_text) VALUES (?, ?, ?, ?, ?)",
-      [sanitizedFilename, blob.url, file.type, file.size, altText || null]
+      "INSERT INTO media (filename, original_name, file_path, file_type, file_size, mime_type, alt_text) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      [sanitizedFilename, file.name, blob.url, file.type.split('/')[0], file.size, file.type, altText || null]
     )
 
     return NextResponse.json({

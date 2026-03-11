@@ -19,14 +19,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Email and password required" }, { status: 400 })
 
     const user = await queryOne<any>(
-      "SELECT * FROM admin_users WHERE email = ? AND is_active = 1",
+      "SELECT * FROM users WHERE email = ? AND is_active = 1",
       [email]
     )
 
     if (!user || !(await bcrypt.compare(password, user.password_hash)))
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
 
-    await execute("UPDATE admin_users SET last_login = NOW() WHERE id = ?", [user.id])
+    await execute("UPDATE users SET updated_at = NOW() WHERE id = ?", [user.id])
 
     const token = await new SignJWT({ userId: user.id, email: user.email, role: user.role })
       .setProtectedHeader({ alg: "HS256" })

@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
     // Get donation history
     const donations = await query(
-      "SELECT * FROM donations WHERE donor_email = ? OR user_id = ? ORDER BY created_at DESC",
+      "SELECT * FROM donations WHERE donor_email = ? OR donor_id = ? ORDER BY created_at DESC",
       [email, users[0].id]
     )
 
