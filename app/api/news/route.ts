@@ -16,18 +16,16 @@ export async function GET(request: Request) {
     let news
     if (categoryId) {
       news = await query(
-        `SELECT n.*, c.name_en as category_name FROM news n
-         LEFT JOIN categories c ON n.category_id = c.id
-         WHERE n.published_at = 1 AND n.category_id = ?
-         ORDER BY n.published_at DESC LIMIT ${limit}`,
-        [Number(categoryId)]
+        `SELECT * FROM news 
+         WHERE published_at IS NOT NULL AND category = ?
+         ORDER BY published_at DESC LIMIT ${limit}`,
+        [categoryId]
       )
     } else {
       news = await query(
-        `SELECT n.*, c.name_en as category_name FROM news n
-         LEFT JOIN categories c ON n.category_id = c.id
-         WHERE n.published_at = 1
-         ORDER BY n.published_at DESC LIMIT ${limit}`
+        `SELECT * FROM news 
+         WHERE published_at IS NOT NULL
+         ORDER BY published_at DESC LIMIT ${limit}`
       )
     }
 

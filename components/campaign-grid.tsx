@@ -9,17 +9,15 @@ import { useRouter } from "next/navigation"
 
 interface Campaign {
   id: number
-  title_en: string
-  title_tr: string
-  description_en: string
-  description_tr: string
-  short_description_en: string
-  short_description_tr: string
-  image_url: string
-  goal_amount: number
-  raised_amount: number
-  is_featured: boolean
-  is_urgent: boolean
+  titleEn: string
+  titleTr: string
+  descriptionEn: string
+  descriptionTr: string
+  imageUrl: string
+  targetAmount: string | null
+  currentAmount: string | null
+  category: string | null
+  isActive: boolean
 }
 
 // Icon mapping helper
@@ -70,51 +68,52 @@ export function CampaignGrid() {
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {campaigns.map((campaign, index) => {
-            // Default to Heart icon if not mapped
+          {campaigns.map((campaign) => {
             const Icon = Heart
+            const targetAmount = parseFloat(campaign.targetAmount || "0")
+            const currentAmount = parseFloat(campaign.currentAmount || "0")
+            const title = language === "en" ? campaign.titleEn : campaign.titleTr
+            const description = language === "en" ? campaign.descriptionEn : campaign.descriptionTr
+            
             return (
               <Card key={campaign.id} className="group overflow-hidden transition-all hover:shadow-xl">
                 <div className="relative h-48 overflow-hidden">
                   <img
-                    src={campaign.image_url || "/placeholder.svg"}
-                    alt={language === "en" ? campaign.title_en : campaign.title_tr}
+                    src={campaign.imageUrl || "/placeholder.svg"}
+                    alt={title}
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute top-4 left-4 rounded-full bg-white/90 p-3">
                     <Icon className="h-6 w-6 text-primary" />
                   </div>
-                  {campaign.is_urgent && (
+                  {campaign.category && (
                     <div className="absolute top-4 right-4 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white">
-                      {language === "en" ? "URGENT" : "ACİL"}
+                      {campaign.category}
                     </div>
                   )}
                 </div>
                 <CardContent className="p-6">
                   <h3 className="mb-1 text-2xl font-bold text-foreground">
-                    {language === "en" ? campaign.title_en : campaign.title_tr}
+                    {title}
                   </h3>
-                  <p className="mb-3 text-sm font-semibold text-accent">
-                    {language === "en" ? campaign.short_description_en : campaign.short_description_tr}
-                  </p>
                   <p className="mb-4 text-sm leading-relaxed text-muted-foreground line-clamp-3">
-                    {language === "en" ? campaign.description_en : campaign.description_tr}
+                    {description}
                   </p>
-                  {campaign.goal_amount > 0 && (
+                  {targetAmount > 0 && (
                     <div className="mb-4">
                       <div className="flex justify-between text-xs text-muted-foreground mb-1">
                         <span>
-                          ${campaign.raised_amount.toLocaleString()} {language === "en" ? "raised" : "toplandı"}
+                          ${currentAmount.toLocaleString()} {language === "en" ? "raised" : "toplandı"}
                         </span>
                         <span>
-                          {language === "en" ? "Goal" : "Hedef"}: ${campaign.goal_amount.toLocaleString()}
+                          {language === "en" ? "Goal" : "Hedef"}: ${targetAmount.toLocaleString()}
                         </span>
                       </div>
                       <div className="h-2 bg-neutral-200 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-accent rounded-full transition-all"
-                          style={{ width: `${Math.min((campaign.raised_amount / campaign.goal_amount) * 100, 100)}%` }}
+                          style={{ width: `${Math.min((currentAmount / targetAmount) * 100, 100)}%` }}
                         />
                       </div>
                     </div>
@@ -133,7 +132,7 @@ export function CampaignGrid() {
                       className="flex-1 bg-primary hover:bg-primary/90"
                       onClick={() =>
                         router.push(
-                          `/donate?campaign=${encodeURIComponent(language === "en" ? campaign.title_en : campaign.title_tr)}`,
+                          `/donate?campaign=${encodeURIComponent(title)}`,
                         )
                       }
                     >
