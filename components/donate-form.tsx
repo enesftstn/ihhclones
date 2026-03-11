@@ -58,34 +58,43 @@ export default function DonateForm() {
         return currentProduct && (selectedAmount || customAmount) && donorInfo.email && getFinalAmount() >= 100
     }
 
-    // Kampanya Kartı Bileşeni
+    // Kampanya Kartı Bileşeni - Seçim belirginliği artırıldı
     const CampaignButton = ({ product }: { product: typeof DONATION_PRODUCTS[0] }) => {
         const isSelected = selectedProduct === product.id
         return (
             <button
                 key={product.id}
                 onClick={() => setSelectedProduct(product.id)}
-                className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 relative ${isSelected
-                        ? "border-accent bg-accent/15 ring-2 ring-accent/20 shadow-lg translate-x-1"
-                        : "border-border bg-card hover:border-accent/40 hover:bg-accent/5 shadow-sm"
+                className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 relative group ${isSelected
+                        ? "border-accent bg-accent/10 shadow-md ring-1 ring-accent/20 translate-x-1"
+                        : "border-border bg-card hover:border-accent/30 hover:bg-accent/5 shadow-sm"
                     }`}
             >
                 <div className="flex items-start justify-between">
                     <div className="flex-1 pr-4">
-                        <h3 className={`font-bold text-base transition-colors ${isSelected ? "text-accent" : "text-foreground"}`}>
+                        <h3 className={`font-bold text-base transition-colors ${isSelected ? "text-accent" : "text-foreground"
+                            }`}>
                             {language === "tr" ? product.nameTranslations.tr : product.nameTranslations.en}
                         </h3>
-                        <p className={`text-xs mt-1 leading-relaxed transition-colors ${isSelected ? "text-foreground/90 font-medium" : "text-muted-foreground"}`}>
+                        <p className={`text-xs mt-1 leading-relaxed transition-colors ${isSelected ? "text-foreground font-medium" : "text-muted-foreground"
+                            }`}>
                             {language === "tr" ? product.descriptionTranslations.tr : product.descriptionTranslations.en}
                         </p>
                     </div>
-                    <div className={`mt-1 h-6 w-6 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${isSelected ? "bg-accent border-accent scale-110" : "bg-transparent border-muted opacity-30 scale-75"
+
+                    {/* Check İkonu Kutusu */}
+                    <div className={`mt-1 h-6 w-6 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${isSelected
+                            ? "bg-accent border-accent scale-110 shadow-sm"
+                            : "bg-muted/20 border-muted opacity-40 scale-90 group-hover:opacity-100"
                         }`}>
-                        <Check className={`h-3 w-3 text-white stroke-[4px] ${isSelected ? "opacity-100" : "opacity-0"}`} />
+                        <Check className={`h-3 w-3 text-white stroke-[4px] transition-opacity ${isSelected ? "opacity-100" : "opacity-0"
+                            }`} />
                     </div>
                 </div>
+
+                {/* Sol Kenar Vurgu Şeridi */}
                 {isSelected && (
-                    <div className="absolute left-0 top-0 h-full w-1.5 bg-accent rounded-l-lg" />
+                    <div className="absolute left-0 top-0 h-full w-2 bg-accent rounded-l-[10px]" />
                 )}
             </button>
         )
