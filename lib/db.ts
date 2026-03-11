@@ -1,20 +1,22 @@
 import mysql from "mysql2/promise";
 import { drizzle } from "drizzle-orm/mysql2";
 
+// Next.js'in çevresel deðiþkenleri doðru okuduðundan emin olalým
+const connectionUri = process.env.DATABASE_URL;
+
 const pool = mysql.createPool({
-    host: process.env.MYSQL_HOST || "tr-c367d0.hosting.net.tr",
-    user: process.env.MYSQL_USER || "enes",
-    password: process.env.MYSQL_PASSWORD || "29082002Enes",
-    database: process.env.MYSQL_DATABASE || "humanitarian_db",
+    // Eðer tek bir URL varsa onu kullan, yoksa parçalý deðiþkenleri kullan
+    uri: connectionUri,
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
     port: Number(process.env.MYSQL_PORT || 3306),
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
-    connectTimeout: 10000,
-    charset: "utf8mb4",
 });
 
-// Drizzle ORM instance
 export const db = drizzle(pool);
 
 // Helper functions for raw SQL if needed
