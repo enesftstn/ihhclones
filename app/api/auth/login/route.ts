@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { queryOne, execute } from "@/lib/db";
+import { queryOne, execute, query } from "@/lib/db";
 import { SignJWT } from "jose";
 import bcrypt from "bcryptjs";
 
@@ -10,29 +10,69 @@ export async function POST(request: Request) {
         const body = await request.json();
         const { email, password } = body;
 
+        console.log("[v0] Login attempt for email:", email);
+
         if (!email || !password) {
-            return NextResponse.json({ error: "Required fields missing" }, { status: 400 });
+            return NextResponse.json({ 
+                error: "Email and password are required",
+                details: { email: !email ? "missing" : "provided", password: !password ? "missing" : "provided" }
+            }, { status: 400 });
         }
 
-        const user = await queryOne(
-            "SELECT * FROM admin_users WHERE email = ? AND is_active = 1",
+        // First check if the user exists at all (regardless of is_active status)
+        const userExists = await queryOne(
+            "SELECT id, email, password_hash, is_active, full_name, role FROM admin_users WHERE email = ?",
             [email]
         );
 
-        if (!user || !(await bcrypt.compare(password, (user as any).password_hash))) {
-            return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+        console.log("[v0] User lookup result:", userExists ? "User found" : "User not found");
+
+        if (!userExists) {
+            return NextResponse.json({ 
+                error: "No account found with this email address",
+                details: { reason: "email_not_found" }
+            }, { status: 401 });
         }
 
-        await execute("UPDATE admin_users SET last_login = NOW() WHERE id = ?", [(user as any).id]);
+        // Check if user is active
+        if (!(userExists as any).is_active) {
+            return NextResponse.json({ 
+                error: "Your account has been deactivated. Please contact an administrator.",
+                details: { reason: "account_deactivated" }
+            }, { status: 401 });
+        }
 
-        const token = await new SignJWT({ userId: (user as any).id, email: (user as any).email, role: (user as any).role })
+        // Verify password
+        const passwordValid = await bcrypt.compare(password, (userExists as any).password_hash);
+        console.log("[v0] Password validation result:", passwordValid ? "Valid" : "Invalid");
+
+        if (!passwordValid) {
+            return NextResponse.json({ 
+                error: "Incorrect password. Please try again.",
+                details: { reason: "invalid_password" }
+            }, { status: 401 });
+        }
+
+        // Update last login timestamp
+        await execute("UPDATE admin_users SET last_login = NOW() WHERE id = ?", [(userExists as any).id]);
+
+        // Create JWT token
+        const token = await new SignJWT({ 
+            userId: (userExists as any).id, 
+            email: (userExists as any).email, 
+            role: (userExists as any).role 
+        })
             .setProtectedHeader({ alg: "HS256" })
             .setExpirationTime("7d")
             .sign(JWT_SECRET);
 
         const response = NextResponse.json({
             success: true,
-            user: { email: (user as any).email, name: (user as any).full_name, role: (user as any).role }
+            user: { 
+                email: (userExists as any).email, 
+                name: (userExists as any).full_name, 
+                role: (userExists as any).role 
+            }
         });
 
         response.cookies.set("session", token, {
@@ -43,9 +83,16 @@ export async function POST(request: Request) {
             path: "/",
         });
 
+        console.log("[v0] Login successful for:", email);
         return response;
-    } catch (error) {
-        console.error("Login error:", error);
-        return NextResponse.json({ error: "Internal Error" }, { status: 500 });
+    } catch (error: any) {
+        console.error("[v0] Login error:", error);
+        return NextResponse.json({ 
+            error: "A server error occurred during login",
+            details: { 
+                reason: "server_error",
+                message: error?.message || "Unknown error"
+            }
+        }, { status: 500 });
     }
 }
