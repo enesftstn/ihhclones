@@ -48,7 +48,11 @@ export default function CampaignDetailPage() {
     )
   }
 
-  const percentage = campaign.goal_amount > 0 ? (campaign.raised_amount / campaign.goal_amount) * 100 : 0
+  const targetAmount = parseFloat(campaign.targetAmount || "0")
+  const currentAmount = parseFloat(campaign.currentAmount || "0")
+  const percentage = targetAmount > 0 ? (currentAmount / targetAmount) * 100 : 0
+  const title = language === "en" ? campaign.titleEn : campaign.titleTr
+  const description = language === "en" ? campaign.descriptionEn : campaign.descriptionTr
 
   return (
     <div className="min-h-screen bg-background py-8">
@@ -61,21 +65,23 @@ export default function CampaignDetailPage() {
         <div className="grid md:grid-cols-3 gap-8">
           <div className="md:col-span-2 space-y-6">
             <img
-              src={campaign.image_url || "/placeholder.svg"}
-              alt={language === "en" ? campaign.title_en : campaign.title_tr}
+              src={campaign.imageUrl || "/placeholder.svg"}
+              alt={title}
               className="w-full h-96 object-cover rounded-lg"
             />
 
             <div>
               <h1 className="text-4xl font-bold text-foreground mb-4">
-                {language === "en" ? campaign.title_en : campaign.title_tr}
+                {title}
               </h1>
-              <p className="text-xl text-muted-foreground mb-6">
-                {language === "en" ? campaign.short_description_en : campaign.short_description_tr}
-              </p>
+              {campaign.category && (
+                <span className="inline-block bg-accent text-white text-sm px-3 py-1 rounded-full mb-4">
+                  {campaign.category}
+                </span>
+              )}
               <div className="prose max-w-none">
                 <p className="text-foreground leading-relaxed">
-                  {language === "en" ? campaign.description_en : campaign.description_tr}
+                  {description}
                 </p>
               </div>
             </div>
@@ -86,10 +92,10 @@ export default function CampaignDetailPage() {
               <CardContent className="p-6 space-y-6">
                 <div>
                   <div className="text-3xl font-bold text-foreground mb-2">
-                    ${campaign.raised_amount?.toLocaleString() || 0}
+                    ${currentAmount.toLocaleString()}
                   </div>
                   <div className="text-sm text-muted-foreground mb-4">
-                    {language === "tr" ? "Hedef" : "Goal"}: ${campaign.goal_amount?.toLocaleString() || 0}
+                    {language === "tr" ? "Hedef" : "Goal"}: ${targetAmount.toLocaleString()}
                   </div>
                   <Progress value={percentage} className="h-3 mb-2" />
                   <div className="text-sm text-accent font-semibold">
@@ -102,7 +108,7 @@ export default function CampaignDetailPage() {
                   size="lg"
                   onClick={() =>
                     router.push(
-                      `/donate?campaign=${encodeURIComponent(language === "en" ? campaign.title_en : campaign.title_tr)}`,
+                      `/donate?campaign=${encodeURIComponent(title)}`,
                     )
                   }
                 >
@@ -116,7 +122,7 @@ export default function CampaignDetailPage() {
                   onClick={() => {
                     if (navigator.share) {
                       navigator.share({
-                        title: language === "en" ? campaign.title_en : campaign.title_tr,
+                        title: title,
                         url: window.location.href,
                       })
                     }

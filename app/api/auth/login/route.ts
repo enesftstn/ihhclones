@@ -10,8 +10,6 @@ export async function POST(request: Request) {
         const body = await request.json();
         const { email, password } = body;
 
-        console.log("[v0] Login attempt for email:", email);
-
         if (!email || !password) {
             return NextResponse.json({ 
                 error: "Email and password are required",
@@ -24,8 +22,6 @@ export async function POST(request: Request) {
             "SELECT id, email, password_hash, is_active, full_name, role FROM admin_users WHERE email = ?",
             [email]
         );
-
-        console.log("[v0] User lookup result:", userExists ? "User found" : "User not found");
 
         if (!userExists) {
             return NextResponse.json({ 
@@ -44,7 +40,6 @@ export async function POST(request: Request) {
 
         // Verify password
         const passwordValid = await bcrypt.compare(password, (userExists as any).password_hash);
-        console.log("[v0] Password validation result:", passwordValid ? "Valid" : "Invalid");
 
         if (!passwordValid) {
             return NextResponse.json({ 
@@ -83,10 +78,8 @@ export async function POST(request: Request) {
             path: "/",
         });
 
-        console.log("[v0] Login successful for:", email);
         return response;
     } catch (error: any) {
-        console.error("[v0] Login error:", error);
         return NextResponse.json({ 
             error: "A server error occurred during login",
             details: { 
