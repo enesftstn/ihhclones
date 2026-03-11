@@ -4,7 +4,7 @@ import { drizzle } from "drizzle-orm/mysql2";
 const pool = mysql.createPool({
     host: process.env.MYSQL_HOST || "tr-c367d0.hosting.net.tr",
     user: process.env.MYSQL_USER || "enes",
-    password: process.env.MYSQL_PASSWORD, 29082002Enes
+    password: process.env.MYSQL_PASSWORD || "29082002Enes",
     database: process.env.MYSQL_DATABASE || "humanitarian_db",
     port: Number(process.env.MYSQL_PORT || 3306),
     waitForConnections: true,
