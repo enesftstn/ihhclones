@@ -18,7 +18,7 @@ export async function GET(request: Request) {
       news = await query(
         `SELECT n.*, c.name_en as category_name FROM news n
          LEFT JOIN categories c ON n.category_id = c.id
-         WHERE n.is_published = 1 AND n.category_id = ?
+         WHERE n.published_at = 1 AND n.category_id = ?
          ORDER BY n.published_at DESC LIMIT ${limit}`,
         [Number(categoryId)]
       )
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
       news = await query(
         `SELECT n.*, c.name_en as category_name FROM news n
          LEFT JOIN categories c ON n.category_id = c.id
-         WHERE n.is_published = 1
+         WHERE n.published_at = 1
          ORDER BY n.published_at DESC LIMIT ${limit}`
       )
     }
