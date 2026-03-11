@@ -12,7 +12,7 @@ export async function GET(
         const campaignId = parseInt(id);
 
         if (isNaN(campaignId)) {
-            return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+            return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
         }
 
         const result = await db
@@ -22,12 +22,12 @@ export async function GET(
             .limit(1);
 
         if (result.length === 0) {
-            return NextResponse.json({ error: "Not Found" }, { status: 404 });
+            return NextResponse.json({ error: "Campaign not found" }, { status: 404 });
         }
 
         return NextResponse.json({ campaign: result[0] });
     } catch (error) {
         console.error("API Error:", error);
-        return NextResponse.json({ error: "Internal Error" }, { status: 500 });
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
