@@ -5,13 +5,18 @@ import { NextResponse } from "next/server";
 
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> } // 1. Adým: Promise olarak tanýmla
 ) {
     try {
-        // ID'yi sayýya çeviriyoruz
-        const campaignId = parseInt(params.id);
+        // 2. Adým: Params'ý bekleyerek (await) içinden id'yi al
+        const { id } = await params;
+        const campaignId = parseInt(id);
 
-        // Drizzle ile sorgu atýyoruz
+        // Nan kontrolü (Güvenlik için)
+        if (isNaN(campaignId)) {
+            return NextResponse.json({ error: "Geçersiz ID formatý" }, { status: 400 });
+        }
+
         const result = await db
             .select()
             .from(campaigns)
@@ -22,7 +27,6 @@ export async function GET(
             return NextResponse.json({ error: "Kampanya bulunamadý" }, { status: 404 });
         }
 
-        // Tek bir kampanya objesi döndürüyoruz
         return NextResponse.json({ campaign: result[0] });
     } catch (error) {
         console.error("API Error:", error);
