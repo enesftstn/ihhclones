@@ -5,13 +5,16 @@ import { NextResponse } from "next/server";
 
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        // ID'yi sayýya çeviriyoruz
-        const campaignId = parseInt(params.id);
+        const { id } = await params;
+        const campaignId = parseInt(id);
 
-        // Drizzle ile sorgu atýyoruz
+        if (isNaN(campaignId)) {
+            return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
+        }
+
         const result = await db
             .select()
             .from(campaigns)
@@ -19,13 +22,12 @@ export async function GET(
             .limit(1);
 
         if (result.length === 0) {
-            return NextResponse.json({ error: "Kampanya bulunamadý" }, { status: 404 });
+            return NextResponse.json({ error: "Campaign not found" }, { status: 404 });
         }
 
-        // Tek bir kampanya objesi döndürüyoruz
         return NextResponse.json({ campaign: result[0] });
     } catch (error) {
         console.error("API Error:", error);
-        return NextResponse.json({ error: "Sunucu hatasý" }, { status: 500 });
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
