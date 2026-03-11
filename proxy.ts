@@ -1,4 +1,4 @@
-// proxy.ts -> middleware.ts olarak deðiþtirildi
+
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/request';
