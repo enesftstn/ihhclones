@@ -41,7 +41,63 @@ export function CallToAction() {
     <section className="py-16 bg-gradient-to-br from-primary to-accent">
       <div className="container mx-auto px-4">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <Card className="bg-white/95 backdrop-blur">
+            <CardContent className="p-8 text-center">
+              <Smartphone className="mx-auto mb-4 h-12 w-12 text-accent" />
+              <h3 className="mb-3 text-2xl font-bold text-foreground">
+                {language === "tr" ? "Mobil Uygulama" : "Mobile App"}
+              </h3>
+              <p className="mb-6 leading-relaxed text-muted-foreground">
+                {language === "tr"
+                  ? "İyilik yapmanın en kolay yolu. Uygulamamız üzerinden bağış yapın, ödeme talimatları verin ve hatırlatıcılar ekleyin."
+                  : "The easiest way to do good. Donate, set payment instructions, and add reminders through our app."}
+              </p>
+              <div className="flex flex-col gap-3">
+                <Button
+                  variant="outline"
+                  className="w-full bg-transparent"
+                  onClick={() => window.open("https://apps.apple.com", "_blank")}
+                >
+                  App Store
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full bg-transparent"
+                  onClick={() => window.open("https://play.google.com", "_blank")}
+                >
+                  Google Play
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
 
+          <Card className="bg-white/95 backdrop-blur">
+            <CardContent className="p-8 text-center">
+              <MessageSquare className="mx-auto mb-4 h-12 w-12 text-accent" />
+              <h3 className="mb-3 text-2xl font-bold text-foreground">
+                {language === "tr" ? "SMS ile Bağış" : "Donate by SMS"}
+              </h3>
+              <p className="mb-6 leading-relaxed text-muted-foreground">
+                {language === "tr"
+                  ? "Herhangi bir operatörden SMS göndererek davalarımızı destekleyin. Hızlı, kolay ve güvenli."
+                  : "Send SMS from any provider to support our causes. Quick, easy, and secure."}
+              </p>
+              <div className="space-y-3">
+                <div className="rounded-lg bg-muted p-4">
+                  <div className="text-2xl font-bold text-primary">3072</div>
+                  <div className="text-sm text-muted-foreground">
+                    {language === "tr" ? "Katarakt Ameliyatı" : "Cataract Surgery"}
+                  </div>
+                </div>
+                <div className="rounded-lg bg-muted p-4">
+                  <div className="text-2xl font-bold text-primary">4072</div>
+                  <div className="text-sm text-muted-foreground">
+                    {language === "tr" ? "Fidye / Kefaret" : "Fidya / Kaffarah"}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           <Card className="bg-white/95 backdrop-blur">
             <CardContent className="p-8 text-center">

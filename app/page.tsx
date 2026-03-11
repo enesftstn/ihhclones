@@ -2,6 +2,7 @@ import { HeroCarousel } from "@/components/hero-carousel"
 import { CampaignGrid } from "@/components/campaign-grid"
 import { NewsSection } from "@/components/news-section"
 import { ImpactStories } from "@/components/impact-stories"
+import { ProjectSection } from "@/components/project-section"
 import { CallToAction } from "@/components/call-to-action"
 
 export default function HomePage() {
@@ -11,6 +12,7 @@ export default function HomePage() {
       <CampaignGrid />
       <NewsSection />
       <ImpactStories />
+      <ProjectSection />
       <CallToAction />
     </main>
   )
