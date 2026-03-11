@@ -40,7 +40,49 @@ export function CallToAction() {
   return (
     <section className="py-16 bg-gradient-to-br from-primary to-accent">
       <div className="container mx-auto px-4">
-        
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+
+
+          <Card className="bg-white/95 backdrop-blur">
+            <CardContent className="p-8 text-center">
+              <Mail className="mx-auto mb-4 h-12 w-12 text-accent" />
+              <h3 className="mb-3 text-2xl font-bold text-foreground">
+                {language === "tr" ? "Güncel Kalın" : "Stay Updated"}
+              </h3>
+              <p className="mb-6 leading-relaxed text-muted-foreground">
+                {language === "tr"
+                  ? "Çalışmalarımız ve nasıl yardım edebileceğiniz hakkında güncellemeler almak için bültenimize abone olun."
+                  : "Subscribe to our newsletter to receive updates about our work and ways you can help."}
+              </p>
+              <div className="space-y-3">
+                <input
+                  type="email"
+                  placeholder={language === "tr" ? "E-posta adresinizi girin" : "Enter your email"}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full rounded-lg border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+                <Button
+                  className="w-full bg-primary hover:bg-primary/90"
+                  onClick={handleSubscribe}
+                  disabled={isSubscribing || !email}
+                >
+                  {subscribed
+                    ? language === "tr"
+                      ? "Abone Oldunuz!"
+                      : "Subscribed!"
+                    : isSubscribing
+                      ? language === "tr"
+                        ? "Abone Oluyor..."
+                        : "Subscribing..."
+                      : language === "tr"
+                        ? "Abone Ol"
+                        : "Subscribe"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         <div className="mt-12 text-center">
           <h3 className="mb-4 text-3xl font-bold text-white">
