@@ -15,7 +15,6 @@ const pool = mysql.createPool({
 export const db = drizzle(pool);
 export { pool };
 
-// Eksik olan fonksiyonlarý buraya ekliyoruz:
 export async function query(sql: string, params: any[] = []) {
     const [rows] = await pool.execute(sql, params);
     return rows as any[];

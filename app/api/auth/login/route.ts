@@ -18,7 +18,6 @@ export async function POST(request: Request) {
         if (!email || !password)
             return NextResponse.json({ error: "Email and password required" }, { status: 400 })
 
-        // Tablo adýný admin_users olarak güncelledik
         const user = await queryOne<any>(
             "SELECT * FROM admin_users WHERE email = ? AND is_active = 1",
             [email]
@@ -27,7 +26,6 @@ export async function POST(request: Request) {
         if (!user || !(await bcrypt.compare(password, user.password_hash)))
             return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
 
-        // updated_at sütununu güncelle
         await execute("UPDATE admin_users SET updated_at = NOW() WHERE id = ?", [user.id])
 
         const token = await new SignJWT({ userId: user.id, email: user.email, role: user.role })
