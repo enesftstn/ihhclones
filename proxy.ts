@@ -1,10 +1,13 @@
+// proxy.ts -> middleware.ts olarak deðiþtirildi
+
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/request';
 import { jwtVerify } from 'jose';
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
 
-export async function proxy(request: NextRequest) {
+// 'proxy' olan ismi 'middleware' yapýyoruz
+export async function middleware(request: NextRequest) {
     const token = request.cookies.get('session')?.value;
     const { pathname } = request.nextUrl;
 
@@ -14,7 +17,7 @@ export async function proxy(request: NextRequest) {
             await jwtVerify(token, JWT_SECRET);
             return NextResponse.redirect(new URL('/admin/dashboard', request.url));
         } catch (e) {
-            // Token geçersizse login sayfasýnda kalabilir
+            // Token geçersizse çerezi temizlemek iyi bir fikir olabilir
         }
     }
 
@@ -29,15 +32,17 @@ export async function proxy(request: NextRequest) {
             await jwtVerify(token, JWT_SECRET);
             return NextResponse.next();
         } catch (error) {
-            // Token sahte veya süresi dolmuþsa kov gitsin
-            return NextResponse.redirect(new URL('/admin/login', request.url));
+            // Token sahte veya süresi dolmuþsa login'e gönder
+            const response = NextResponse.redirect(new URL('/admin/login', request.url));
+            // Bozuk token'ý temizle ki sonsuz döngüye girmesin
+            response.cookies.delete('session');
+            return response;
         }
     }
 
     return NextResponse.next();
 }
 
-// Sadece /admin ile baþlayan rotalarda çalýþmasý için:
 export const config = {
     matcher: ['/admin/:path*'],
 };
