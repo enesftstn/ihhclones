@@ -1,7 +1,11 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { queryOne, execute, query } from "@/lib/db";
 import { SignJWT } from "jose";
 import bcrypt from "bcryptjs";
+
+if (!process.env.JWT_SECRET) {
+    console.warn("⚠️ KRİTİK UYARI: JWT_SECRET ortam değişkeni tanımlı değil! 'default_secret_key' kullanılıyor.");
+}
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
 
