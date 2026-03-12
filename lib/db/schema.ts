@@ -260,3 +260,23 @@ export const donorProfiles = mysqlTable("donor_profiles", {
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
 });
+
+// =====================================================
+// BANNER MANAGEMENT TABLE
+// =====================================================
+
+export const banners = mysqlTable("banners", {
+    id: serial("id").primaryKey(),
+    titleEn: varchar("title_en", { length: 255 }).notNull(),
+    titleTr: varchar("title_tr", { length: 255 }).notNull(),
+    subtitleEn: text("subtitle_en"),
+    subtitleTr: text("subtitle_tr"),
+    imageUrl: text("image_url").notNull(),
+    linkUrl: text("link_url"),
+    buttonTextEn: varchar("button_text_en", { length: 100 }),
+    buttonTextTr: varchar("button_text_tr", { length: 100 }),
+    sortOrder: int("sort_order").default(0),
+    isActive: boolean("is_active").default(true),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
+});

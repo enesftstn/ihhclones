@@ -6,6 +6,7 @@ import "./globals.css"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { LanguageProvider } from "@/contexts/language-context"
+import { Toaster } from "sonner"
 
 const inter = Inter({ subsets: ["latin"] })
 const poppins = Poppins({
@@ -15,10 +16,10 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: "Hope Relief Foundation - Humanitarian Aid Organization",
+  title: "Ahde Vefa - Sosyal Yardımlaşma ve Dayanışma Derneği",
   description:
-    "Providing humanitarian aid, emergency relief, and development programs to communities in need worldwide. Join us in making a difference.",
-  keywords: "humanitarian aid, charity, donation, emergency relief, orphan sponsorship, clean water, medical aid",
+    "Ahde Vefa Sosyal Yardımlaşma ve Dayanışma Derneği - İhtiyaç sahiplerine insani yardım, acil destek ve kalkınma programları sunuyoruz.",
+  keywords: "insani yardım, bağış, hayır kurumu, acil yardım, yetim sponsorluğu, temiz su, tıbbi yardım, ahde vefa",
 }
 
 export default function RootLayout({
@@ -33,6 +34,7 @@ export default function RootLayout({
           <SiteHeader />
           {children}
           <SiteFooter />
+          <Toaster position="top-right" richColors />
         </LanguageProvider>
         <Analytics />
       </body>

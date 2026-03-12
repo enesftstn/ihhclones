@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Heart, Menu, X, Search, User } from "lucide-react"
+import { Menu, X, Search, User } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { useLanguage } from "@/contexts/language-context"
 
 export function SiteHeader() {
@@ -43,9 +44,18 @@ export function SiteHeader() {
 
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <Heart className="h-8 w-8 text-accent fill-accent" />
-            <span className="text-2xl font-bold text-foreground">Hope Relief</span>
+          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <Image 
+              src="/images/logo.png" 
+              alt="Ahde Vefa Logo" 
+              width={48} 
+              height={48}
+              className="rounded-full"
+            />
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-foreground leading-tight">AHDE VEFA</span>
+              <span className="text-xs text-muted-foreground leading-tight hidden sm:block">Sosyal Yardımlaşma ve Dayanışma Derneği</span>
+            </div>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">
@@ -81,7 +91,9 @@ export function SiteHeader() {
                 <User className="h-5 w-5" />
               </Button>
             </Link>
-            <Button className="hidden md:flex bg-accent hover:bg-accent/90">{t("nav.donate")}</Button>
+            <Link href="/donate">
+              <Button className="hidden md:flex bg-accent hover:bg-accent/90">{t("nav.donate")}</Button>
+            </Link>
             <Button
               variant="ghost"
               size="icon"
@@ -115,7 +127,9 @@ export function SiteHeader() {
             <Link href="/admin/login" className="text-sm font-medium text-foreground">
               {t("nav.login")}
             </Link>
-            <Button className="w-full bg-accent hover:bg-accent/90">{t("nav.donate")}</Button>
+            <Link href="/donate" className="w-full">
+              <Button className="w-full bg-accent hover:bg-accent/90">{t("nav.donate")}</Button>
+            </Link>
           </nav>
         </div>
       )}

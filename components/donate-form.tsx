@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import { useLanguage } from "@/contexts/language-context"
 import { DONATION_PRODUCTS } from "@/lib/donation-products"
@@ -10,10 +10,25 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Heart, Check } from "lucide-react"
+import { Heart, Check, Loader2, Target } from "lucide-react"
+import useSWR from "swr"
 
-// StripeCheckout bileşeninin tanımlı olduğunu varsayıyoruz
-const StripeCheckout = ({ productId, amount, donorInfo }: any) => (
+const fetcher = (url: string) => fetch(url).then(res => res.json())
+
+interface Campaign {
+    id: number
+    title_en: string
+    title_tr: string
+    description_en: string
+    description_tr: string
+    target_amount: string
+    current_amount: string
+    image_url: string
+    category: string
+}
+
+// StripeCheckout component
+const StripeCheckout = ({ productId, amount, donorInfo }: { productId: string; amount: number; donorInfo: any }) => (
     <div className="p-4 border-2 border-dashed rounded-lg text-center bg-muted/20">
         Stripe Integration Ready - Final Amount: ${(amount / 100).toFixed(2)}
     </div>
@@ -22,9 +37,15 @@ const StripeCheckout = ({ productId, amount, donorInfo }: any) => (
 export default function DonateForm() {
     const { language } = useLanguage()
     const searchParams = useSearchParams()
-    const preselectedProductId = searchParams.get("campaign") || "general-donation"
+    const campaignIdFromUrl = searchParams.get("campaign")
 
-    const [selectedProduct, setSelectedProduct] = useState(preselectedProductId)
+    // Fetch campaigns from database
+    const { data: campaignsData, isLoading: isLoadingCampaigns } = useSWR<{ campaigns: Campaign[] }>('/api/campaigns', fetcher)
+    const dbCampaigns = campaignsData?.campaigns || []
+
+    const [selectedType, setSelectedType] = useState<"database" | "preset">(campaignIdFromUrl ? "database" : "preset")
+    const [selectedDbCampaign, setSelectedDbCampaign] = useState<number | null>(campaignIdFromUrl ? parseInt(campaignIdFromUrl) : null)
+    const [selectedPresetProduct, setSelectedPresetProduct] = useState("general-donation")
     const [selectedAmount, setSelectedAmount] = useState<number | null>(null)
     const [customAmount, setCustomAmount] = useState("")
     const [donorInfo, setDonorInfo] = useState({
@@ -34,7 +55,12 @@ export default function DonateForm() {
     })
     const [showCheckout, setShowCheckout] = useState(false)
 
-    const currentProduct = DONATION_PRODUCTS.find((p) => p.id === selectedProduct)
+    // Get current selected campaign from database
+    const currentDbCampaign = dbCampaigns.find((c) => c.id === selectedDbCampaign)
+    const currentPresetProduct = DONATION_PRODUCTS.find((p) => p.id === selectedPresetProduct)
+
+    // Default suggested amounts
+    const suggestedAmounts = currentPresetProduct?.suggestedAmounts || [2500, 5000, 10000, 25000]
 
     const handleAmountSelect = (amount: number) => {
         setSelectedAmount(amount)
@@ -55,50 +81,114 @@ export default function DonateForm() {
     }
 
     const canProceed = () => {
-        return currentProduct && (selectedAmount || customAmount) && donorInfo.email && getFinalAmount() >= 100
+        const hasValidCampaign = selectedType === "database" ? selectedDbCampaign !== null : selectedPresetProduct
+        return hasValidCampaign && (selectedAmount || customAmount) && donorInfo.email && getFinalAmount() >= 100
     }
 
-    // Kampanya Kartı Bileşeni - Seçim belirginliği artırıldı
-    const CampaignButton = ({ product }: { product: typeof DONATION_PRODUCTS[0] }) => {
-        const isSelected = selectedProduct === product.id
+    // Database Campaign Card Component
+    const DbCampaignButton = ({ campaign }: { campaign: Campaign }) => {
+        const isSelected = selectedDbCampaign === campaign.id
+        const title = language === "tr" ? campaign.title_tr : campaign.title_en
+        const description = language === "tr" ? campaign.description_tr : campaign.description_en
+
         return (
             <button
-                key={product.id}
-                onClick={() => setSelectedProduct(product.id)}
+                onClick={() => {
+                    setSelectedType("database")
+                    setSelectedDbCampaign(campaign.id)
+                }}
                 className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 relative group ${isSelected
-                        ? "border-accent bg-accent/10 shadow-md ring-1 ring-accent/20 translate-x-1"
-                        : "border-border bg-card hover:border-accent/30 hover:bg-accent/5 shadow-sm"
+                    ? "border-accent bg-accent/10 shadow-md ring-1 ring-accent/20 translate-x-1"
+                    : "border-border bg-card hover:border-accent/30 hover:bg-accent/5 shadow-sm"
                     }`}
             >
                 <div className="flex items-start justify-between">
                     <div className="flex-1 pr-4">
-                        <h3 className={`font-bold text-base transition-colors ${isSelected ? "text-accent" : "text-foreground"
-                            }`}>
-                            {language === "tr" ? product.nameTranslations.tr : product.nameTranslations.en}
+                        <h3 className={`font-bold text-base transition-colors ${isSelected ? "text-accent" : "text-foreground"}`}>
+                            {title}
                         </h3>
-                        <p className={`text-xs mt-1 leading-relaxed transition-colors ${isSelected ? "text-foreground font-medium" : "text-muted-foreground"
-                            }`}>
-                            {language === "tr" ? product.descriptionTranslations.tr : product.descriptionTranslations.en}
+                        <p className={`text-xs mt-1 leading-relaxed transition-colors line-clamp-2 ${isSelected ? "text-foreground font-medium" : "text-muted-foreground"}`}>
+                            {description}
                         </p>
+                        {campaign.category && (
+                            <span className="inline-block text-[10px] uppercase bg-accent/10 text-accent px-2 py-0.5 rounded mt-2 font-medium">
+                                {campaign.category}
+                            </span>
+                        )}
                     </div>
-
-                    {/* Check İkonu Kutusu */}
                     <div className={`mt-1 h-6 w-6 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${isSelected
-                            ? "bg-accent border-accent scale-110 shadow-sm"
-                            : "bg-muted/20 border-muted opacity-40 scale-90 group-hover:opacity-100"
+                        ? "bg-accent border-accent scale-110 shadow-sm"
+                        : "bg-muted/20 border-muted opacity-40 scale-90 group-hover:opacity-100"
                         }`}>
-                        <Check className={`h-3 w-3 text-white stroke-[4px] transition-opacity ${isSelected ? "opacity-100" : "opacity-0"
-                            }`} />
+                        <Check className={`h-3 w-3 text-white stroke-[4px] transition-opacity ${isSelected ? "opacity-100" : "opacity-0"}`} />
                     </div>
                 </div>
-
-                {/* Sol Kenar Vurgu Şeridi */}
                 {isSelected && (
                     <div className="absolute left-0 top-0 h-full w-2 bg-accent rounded-l-[10px]" />
                 )}
             </button>
         )
     }
+
+    // Preset Campaign Card Component
+    const PresetCampaignButton = ({ product }: { product: typeof DONATION_PRODUCTS[0] }) => {
+        const isSelected = selectedType === "preset" && selectedPresetProduct === product.id
+        return (
+            <button
+                onClick={() => {
+                    setSelectedType("preset")
+                    setSelectedPresetProduct(product.id)
+                    setSelectedDbCampaign(null)
+                }}
+                className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 relative group ${isSelected
+                    ? "border-accent bg-accent/10 shadow-md ring-1 ring-accent/20 translate-x-1"
+                    : "border-border bg-card hover:border-accent/30 hover:bg-accent/5 shadow-sm"
+                    }`}
+            >
+                <div className="flex items-start justify-between">
+                    <div className="flex-1 pr-4">
+                        <h3 className={`font-bold text-base transition-colors ${isSelected ? "text-accent" : "text-foreground"}`}>
+                            {language === "tr" ? product.nameTranslations.tr : product.nameTranslations.en}
+                        </h3>
+                        <p className={`text-xs mt-1 leading-relaxed transition-colors ${isSelected ? "text-foreground font-medium" : "text-muted-foreground"}`}>
+                            {language === "tr" ? product.descriptionTranslations.tr : product.descriptionTranslations.en}
+                        </p>
+                    </div>
+                    <div className={`mt-1 h-6 w-6 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${isSelected
+                        ? "bg-accent border-accent scale-110 shadow-sm"
+                        : "bg-muted/20 border-muted opacity-40 scale-90 group-hover:opacity-100"
+                        }`}>
+                        <Check className={`h-3 w-3 text-white stroke-[4px] transition-opacity ${isSelected ? "opacity-100" : "opacity-0"}`} />
+                    </div>
+                </div>
+                {isSelected && (
+                    <div className="absolute left-0 top-0 h-full w-2 bg-accent rounded-l-[10px]" />
+                )}
+            </button>
+        )
+    }
+
+    // Selected campaign display
+    const getSelectedCampaignInfo = () => {
+        if (selectedType === "database" && currentDbCampaign) {
+            return {
+                title: language === "tr" ? currentDbCampaign.title_tr : currentDbCampaign.title_en,
+                description: language === "tr" ? currentDbCampaign.description_tr : currentDbCampaign.description_en,
+                category: currentDbCampaign.category,
+                image: currentDbCampaign.image_url
+            }
+        } else if (selectedType === "preset" && currentPresetProduct) {
+            return {
+                title: language === "tr" ? currentPresetProduct.nameTranslations.tr : currentPresetProduct.nameTranslations.en,
+                description: language === "tr" ? currentPresetProduct.descriptionTranslations.tr : currentPresetProduct.descriptionTranslations.en,
+                category: currentPresetProduct.category,
+                image: currentPresetProduct.image
+            }
+        }
+        return null
+    }
+
+    const selectedCampaignInfo = getSelectedCampaignInfo()
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-background to-muted/50 py-12">
@@ -117,8 +207,32 @@ export default function DonateForm() {
                             </p>
                         </div>
 
+                        {/* Selected Campaign Banner */}
+                        {selectedCampaignInfo && (
+                            <Card className="mb-8 border-2 border-accent/30 bg-accent/5">
+                                <CardContent className="p-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className="bg-accent/20 p-3 rounded-full">
+                                            <Target className="h-6 w-6 text-accent" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="text-sm text-muted-foreground">
+                                                {language === "tr" ? "Seçilen Kampanya" : "Selected Campaign"}
+                                            </p>
+                                            <h3 className="text-lg font-bold text-foreground">{selectedCampaignInfo.title}</h3>
+                                            {selectedCampaignInfo.category && (
+                                                <span className="inline-block text-xs uppercase bg-accent/20 text-accent px-2 py-0.5 rounded mt-1">
+                                                    {selectedCampaignInfo.category}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
+
                         <div className="grid lg:grid-cols-12 gap-8 items-start">
-                            {/* Sol Kolon - Kampanya Seçimi (5 Birim) */}
+                            {/* Left Column - Campaign Selection */}
                             <Card className="lg:col-span-5 border-none shadow-2xl bg-card/80 backdrop-blur-sm">
                                 <CardHeader>
                                     <CardTitle className="text-xl font-bold flex items-center gap-2">
@@ -127,32 +241,42 @@ export default function DonateForm() {
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <Tabs value={selectedProduct} onValueChange={setSelectedProduct} className="w-full">
+                                    <Tabs defaultValue={dbCampaigns.length > 0 ? "active" : "all"} className="w-full">
                                         <TabsList className="grid grid-cols-2 mb-6 p-1 bg-muted rounded-xl">
-                                            <TabsTrigger value="emergency" className="rounded-lg data-[state=active]:bg-accent data-[state=active]:text-white font-semibold transition-all">
-                                                {language === "tr" ? "Acil" : "Emergency"}
+                                            <TabsTrigger value="active" className="rounded-lg data-[state=active]:bg-accent data-[state=active]:text-white font-semibold transition-all">
+                                                {language === "tr" ? "Aktif Kampanyalar" : "Active Campaigns"}
                                             </TabsTrigger>
                                             <TabsTrigger value="all" className="rounded-lg data-[state=active]:bg-accent data-[state=active]:text-white font-semibold transition-all">
-                                                {language === "tr" ? "Tümü" : "All"}
+                                                {language === "tr" ? "Kategoriler" : "Categories"}
                                             </TabsTrigger>
                                         </TabsList>
 
-                                        <TabsContent value="emergency" className="space-y-4 outline-none">
-                                            {DONATION_PRODUCTS.filter((p) => p.category === "emergency").map((product) => (
-                                                <CampaignButton key={product.id} product={product} />
-                                            ))}
+                                        <TabsContent value="active" className="space-y-4 max-h-[550px] overflow-y-auto pr-2 outline-none">
+                                            {isLoadingCampaigns ? (
+                                                <div className="flex items-center justify-center py-8">
+                                                    <Loader2 className="h-6 w-6 animate-spin text-accent" />
+                                                </div>
+                                            ) : dbCampaigns.length === 0 ? (
+                                                <p className="text-center text-muted-foreground py-8">
+                                                    {language === "tr" ? "Aktif kampanya bulunamadı" : "No active campaigns found"}
+                                                </p>
+                                            ) : (
+                                                dbCampaigns.map((campaign) => (
+                                                    <DbCampaignButton key={campaign.id} campaign={campaign} />
+                                                ))
+                                            )}
                                         </TabsContent>
 
-                                        <TabsContent value="all" className="space-y-4 max-h-[550px] overflow-y-auto pr-2 custom-scrollbar outline-none">
+                                        <TabsContent value="all" className="space-y-4 max-h-[550px] overflow-y-auto pr-2 outline-none">
                                             {DONATION_PRODUCTS.map((product) => (
-                                                <CampaignButton key={product.id} product={product} />
+                                                <PresetCampaignButton key={product.id} product={product} />
                                             ))}
                                         </TabsContent>
                                     </Tabs>
                                 </CardContent>
                             </Card>
 
-                            {/* Sağ Kolon - Miktar ve Bilgiler (7 Birim) */}
+                            {/* Right Column - Amount and Info */}
                             <div className="lg:col-span-7 space-y-6">
                                 <Card className="border-none shadow-xl overflow-hidden">
                                     <div className="h-1.5 bg-accent/20 w-full" />
@@ -161,13 +285,13 @@ export default function DonateForm() {
                                     </CardHeader>
                                     <CardContent className="space-y-6">
                                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                                            {currentProduct?.suggestedAmounts.map((amount) => (
+                                            {suggestedAmounts.map((amount) => (
                                                 <Button
                                                     key={amount}
                                                     variant={selectedAmount === amount ? "default" : "outline"}
                                                     className={`h-14 text-lg font-bold rounded-xl transition-all ${selectedAmount === amount
-                                                            ? "bg-accent text-white hover:bg-accent/90 shadow-md ring-2 ring-accent/20"
-                                                            : "hover:border-accent/40 hover:bg-accent/5"
+                                                        ? "bg-accent text-white hover:bg-accent/90 shadow-md ring-2 ring-accent/20"
+                                                        : "hover:border-accent/40 hover:bg-accent/5"
                                                         }`}
                                                     onClick={() => handleAmountSelect(amount)}
                                                 >
@@ -263,6 +387,28 @@ export default function DonateForm() {
                             {language === "tr" ? "← Bilgilerimi Düzenle" : "← Edit My Information"}
                         </Button>
 
+                        {/* Show selected campaign in checkout */}
+                        {selectedCampaignInfo && (
+                            <Card className="mb-6 border-2 border-accent/30 bg-accent/5">
+                                <CardContent className="p-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className="bg-accent/20 p-3 rounded-full">
+                                            <Target className="h-6 w-6 text-accent" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="text-sm text-muted-foreground">
+                                                {language === "tr" ? "Bağış Yapılacak Kampanya" : "Donating to"}
+                                            </p>
+                                            <h3 className="text-lg font-bold text-foreground">{selectedCampaignInfo.title}</h3>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-2xl font-bold text-accent">${(getFinalAmount() / 100).toFixed(2)}</p>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
+
                         <Card className="border-none shadow-2xl overflow-hidden rounded-2xl">
                             <div className="h-2 bg-accent w-full" />
                             <div className="p-8 bg-muted/20 border-b">
@@ -273,7 +419,7 @@ export default function DonateForm() {
                             </div>
                             <CardContent className="p-8">
                                 <StripeCheckout
-                                    productId={selectedProduct}
+                                    productId={selectedType === "database" ? `campaign-${selectedDbCampaign}` : selectedPresetProduct}
                                     amount={getFinalAmount()}
                                     donorInfo={donorInfo}
                                 />

@@ -10,55 +10,52 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
-import { Plus, Trash2, ArrowLeft, Loader2, RefreshCw, User, Calendar } from "lucide-react"
+import { Plus, Trash2, ArrowLeft, Loader2, RefreshCw, MapPin, Calendar } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
 
-interface NewsArticle {
+interface ImpactStory {
     id: number
-    title_en: string
-    title_tr: string
-    content_en: string
-    content_tr: string
-    excerpt_en: string
-    excerpt_tr: string
+    name_en: string
+    name_tr: string
+    story_en: string
+    story_tr: string
+    location_en: string
+    location_tr: string
     image_url: string
-    category: string
-    author: string
-    published_at: string
+    year: number
     created_at: string
 }
 
-export default function AdminNewsPage() {
-    const [news, setNews] = useState<NewsArticle[]>([])
+export default function AdminStoriesPage() {
+    const [stories, setStories] = useState<ImpactStory[]>([])
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [formData, setFormData] = useState({
-        titleEn: "",
-        titleTr: "",
-        contentEn: "",
-        contentTr: "",
-        excerptEn: "",
-        excerptTr: "",
+        nameEn: "",
+        nameTr: "",
+        storyEn: "",
+        storyTr: "",
+        locationEn: "",
+        locationTr: "",
         imageUrl: "",
-        author: "",
-        category: "",
+        year: new Date().getFullYear().toString(),
     })
 
     useEffect(() => {
-        fetchNews()
+        fetchStories()
     }, [])
 
-    const fetchNews = async () => {
+    const fetchStories = async () => {
         setIsLoading(true)
         try {
-            const res = await fetch("/api/news?limit=50")
+            const res = await fetch("/api/impact-stories")
             const data = await res.json()
-            setNews(data.news || [])
+            setStories(data.stories || [])
         } catch (error) {
-            console.error("[v0] Error fetching news:", error)
-            toast.error("Failed to load news")
+            console.error("[v0] Error fetching stories:", error)
+            toast.error("Failed to load stories")
         } finally {
             setIsLoading(false)
         }
@@ -69,34 +66,33 @@ export default function AdminNewsPage() {
         setIsSubmitting(true)
 
         try {
-            const res = await fetch("/api/news", {
+            const res = await fetch("/api/impact-stories", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
             })
 
             if (res.ok) {
-                toast.success("News article published successfully")
+                toast.success("Impact story created successfully")
                 setIsDialogOpen(false)
-                fetchNews()
+                fetchStories()
                 setFormData({
-                    titleEn: "",
-                    titleTr: "",
-                    contentEn: "",
-                    contentTr: "",
-                    excerptEn: "",
-                    excerptTr: "",
+                    nameEn: "",
+                    nameTr: "",
+                    storyEn: "",
+                    storyTr: "",
+                    locationEn: "",
+                    locationTr: "",
                     imageUrl: "",
-                    author: "",
-                    category: "",
+                    year: new Date().getFullYear().toString(),
                 })
             } else {
                 const data = await res.json()
-                toast.error(data.error || "Failed to publish news")
+                toast.error(data.error || "Failed to create story")
             }
         } catch (error) {
-            console.error("[v0] Error creating news:", error)
-            toast.error("Failed to publish news")
+            console.error("[v0] Error creating story:", error)
+            toast.error("Failed to create story")
         } finally {
             setIsSubmitting(false)
         }
@@ -104,19 +100,19 @@ export default function AdminNewsPage() {
 
     const handleDelete = async (id: number) => {
         try {
-            const res = await fetch(`/api/news?id=${id}`, {
+            const res = await fetch(`/api/impact-stories?id=${id}`, {
                 method: "DELETE",
             })
 
             if (res.ok) {
-                toast.success("News article deleted successfully")
-                fetchNews()
+                toast.success("Story deleted successfully")
+                fetchStories()
             } else {
-                toast.error("Failed to delete news")
+                toast.error("Failed to delete story")
             }
         } catch (error) {
-            console.error("[v0] Error deleting news:", error)
-            toast.error("Failed to delete news")
+            console.error("[v0] Error deleting story:", error)
+            toast.error("Failed to delete story")
         }
     }
 
@@ -131,107 +127,107 @@ export default function AdminNewsPage() {
                                 Back to Dashboard
                             </Button>
                         </Link>
-                        <h1 className="text-3xl font-bold">Manage News</h1>
-                        <p className="text-muted-foreground mt-1">Publish news articles and updates</p>
+                        <h1 className="text-3xl font-bold">Impact Stories</h1>
+                        <p className="text-muted-foreground mt-1">Share success stories and testimonials</p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <Button variant="outline" size="icon" onClick={fetchNews}>
+                        <Button variant="outline" size="icon" onClick={fetchStories}>
                             <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
                         </Button>
                         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                             <DialogTrigger asChild>
                                 <Button>
                                     <Plus className="h-4 w-4 mr-2" />
-                                    Add News Article
+                                    Add Story
                                 </Button>
                             </DialogTrigger>
                             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                                 <DialogHeader>
-                                    <DialogTitle>Publish News Article</DialogTitle>
+                                    <DialogTitle>Add Impact Story</DialogTitle>
                                 </DialogHeader>
                                 <form onSubmit={handleSubmit} className="space-y-4">
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <Label htmlFor="titleEn">Title (English) *</Label>
+                                            <Label htmlFor="nameEn">Name (English) *</Label>
                                             <Input
-                                                id="titleEn"
-                                                value={formData.titleEn}
-                                                onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })}
+                                                id="nameEn"
+                                                value={formData.nameEn}
+                                                onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })}
+                                                placeholder="Person's name or title"
                                                 required
                                             />
                                         </div>
                                         <div>
-                                            <Label htmlFor="titleTr">Title (Turkish) *</Label>
+                                            <Label htmlFor="nameTr">Name (Turkish) *</Label>
                                             <Input
-                                                id="titleTr"
-                                                value={formData.titleTr}
-                                                onChange={(e) => setFormData({ ...formData, titleTr: e.target.value })}
+                                                id="nameTr"
+                                                value={formData.nameTr}
+                                                onChange={(e) => setFormData({ ...formData, nameTr: e.target.value })}
                                                 required
                                             />
                                         </div>
                                     </div>
 
                                     <div>
-                                        <Label htmlFor="excerptEn">Excerpt/Summary (English)</Label>
+                                        <Label htmlFor="storyEn">Story (English)</Label>
                                         <Textarea
-                                            id="excerptEn"
-                                            value={formData.excerptEn}
-                                            onChange={(e) => setFormData({ ...formData, excerptEn: e.target.value })}
-                                            rows={2}
-                                            placeholder="Brief summary of the article..."
+                                            id="storyEn"
+                                            value={formData.storyEn}
+                                            onChange={(e) => setFormData({ ...formData, storyEn: e.target.value })}
+                                            rows={4}
+                                            placeholder="Share the impact story..."
                                         />
                                     </div>
 
                                     <div>
-                                        <Label htmlFor="contentEn">Content (English)</Label>
+                                        <Label htmlFor="storyTr">Story (Turkish)</Label>
                                         <Textarea
-                                            id="contentEn"
-                                            value={formData.contentEn}
-                                            onChange={(e) => setFormData({ ...formData, contentEn: e.target.value })}
-                                            rows={6}
-                                            placeholder="Full article content..."
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="contentTr">Content (Turkish)</Label>
-                                        <Textarea
-                                            id="contentTr"
-                                            value={formData.contentTr}
-                                            onChange={(e) => setFormData({ ...formData, contentTr: e.target.value })}
-                                            rows={6}
+                                            id="storyTr"
+                                            value={formData.storyTr}
+                                            onChange={(e) => setFormData({ ...formData, storyTr: e.target.value })}
+                                            rows={4}
                                         />
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <Label htmlFor="author">Author</Label>
+                                            <Label htmlFor="locationEn">Location (English)</Label>
                                             <Input
-                                                id="author"
-                                                value={formData.author}
-                                                onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                                                placeholder="Author name"
+                                                id="locationEn"
+                                                value={formData.locationEn}
+                                                onChange={(e) => setFormData({ ...formData, locationEn: e.target.value })}
+                                                placeholder="e.g., Gaza, Palestine"
                                             />
                                         </div>
                                         <div>
-                                            <Label htmlFor="category">Category</Label>
+                                            <Label htmlFor="locationTr">Location (Turkish)</Label>
                                             <Input
-                                                id="category"
-                                                value={formData.category}
-                                                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                                placeholder="e.g., Update, Event, Press"
+                                                id="locationTr"
+                                                value={formData.locationTr}
+                                                onChange={(e) => setFormData({ ...formData, locationTr: e.target.value })}
                                             />
                                         </div>
                                     </div>
 
-                                    <div>
-                                        <Label htmlFor="imageUrl">Featured Image URL</Label>
-                                        <Input
-                                            id="imageUrl"
-                                            value={formData.imageUrl}
-                                            onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                                            placeholder="https://..."
-                                        />
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <Label htmlFor="imageUrl">Image URL</Label>
+                                            <Input
+                                                id="imageUrl"
+                                                value={formData.imageUrl}
+                                                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                                                placeholder="https://..."
+                                            />
+                                        </div>
+                                        <div>
+                                            <Label htmlFor="year">Year</Label>
+                                            <Input
+                                                id="year"
+                                                type="number"
+                                                value={formData.year}
+                                                onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                                            />
+                                        </div>
                                     </div>
 
                                     <DialogFooter>
@@ -240,7 +236,7 @@ export default function AdminNewsPage() {
                                         </Button>
                                         <Button type="submit" disabled={isSubmitting}>
                                             {isSubmitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                                            Publish Article
+                                            Add Story
                                         </Button>
                                     </DialogFooter>
                                 </form>
@@ -253,74 +249,66 @@ export default function AdminNewsPage() {
                     <div className="flex items-center justify-center py-20">
                         <Loader2 className="h-8 w-8 animate-spin text-accent" />
                     </div>
-                ) : news.length === 0 ? (
+                ) : stories.length === 0 ? (
                     <div className="text-center py-20">
-                        <p className="text-muted-foreground mb-4">No news articles found</p>
+                        <p className="text-muted-foreground mb-4">No impact stories found</p>
                         <Button onClick={() => setIsDialogOpen(true)}>
                             <Plus className="h-4 w-4 mr-2" />
-                            Publish Your First Article
+                            Add Your First Story
                         </Button>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {news.map((article) => (
-                            <Card key={article.id} className="overflow-hidden">
-                                {article.image_url && (
+                        {stories.map((story) => (
+                            <Card key={story.id} className="overflow-hidden">
+                                {story.image_url && (
                                     <div className="h-40 relative">
                                         <img
-                                            src={article.image_url}
-                                            alt={article.title_en}
+                                            src={story.image_url}
+                                            alt={story.name_en}
                                             className="w-full h-full object-cover"
                                         />
                                     </div>
                                 )}
                                 <CardHeader>
-                                    <CardTitle className="text-lg line-clamp-2">{article.title_en}</CardTitle>
+                                    <CardTitle className="text-lg">{story.name_en}</CardTitle>
                                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                        {article.author && (
+                                        {story.location_en && (
                                             <span className="flex items-center gap-1">
-                                                <User className="h-3 w-3" />
-                                                {article.author}
+                                                <MapPin className="h-3 w-3" />
+                                                {story.location_en}
                                             </span>
                                         )}
-                                        {article.published_at && (
+                                        {story.year && (
                                             <span className="flex items-center gap-1">
                                                 <Calendar className="h-3 w-3" />
-                                                {new Date(article.published_at).toLocaleDateString()}
+                                                {story.year}
                                             </span>
                                         )}
                                     </div>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="space-y-4">
-                                        <p className="text-sm text-muted-foreground line-clamp-3">
-                                            {article.excerpt_en || article.content_en}
-                                        </p>
-
-                                        {article.category && (
-                                            <span className="inline-block text-xs uppercase bg-accent/10 text-accent px-2 py-0.5 rounded">
-                                                {article.category}
-                                            </span>
-                                        )}
+                                        <p className="text-sm text-muted-foreground line-clamp-3">{story.story_en}</p>
 
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
                                                 <Button size="sm" variant="outline" className="w-full bg-transparent text-destructive hover:text-destructive">
                                                     <Trash2 className="h-3 w-3 mr-1" />
-                                                    Delete Article
+                                                    Delete Story
                                                 </Button>
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>
-                                                    <AlertDialogTitle>Delete Article</AlertDialogTitle>
+                                                    <AlertDialogTitle>Delete Story</AlertDialogTitle>
                                                     <AlertDialogDescription>
-                                                        Are you sure you want to delete "{article.title_en}"? This action cannot be undone.
+                                                        Are you sure you want to delete "{story.name_en}"? This action cannot be undone.
                                                     </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
                                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                                                     <AlertDialogAction
-                                                        onClick={() => handleDelete(article.id)}
+                                                        onClick={() => handleDelete(story.id)}
                                                         className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                                     >
                                                         Delete
