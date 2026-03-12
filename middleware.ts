@@ -12,6 +12,8 @@ export async function middleware(request: NextRequest) {
     console.log("Istek Gelen Yol:", pathname);
     console.log("Token Mevcut mu?:", !!token);
 
+    console.log("Çerezlerin Tamamý:", request.cookies.getAll());
+
     if (pathname === '/admin/login' && token) {
         try {
             await jwtVerify(token, JWT_SECRET);
