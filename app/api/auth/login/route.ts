@@ -42,6 +42,11 @@ export async function POST(request: Request) {
             }, { status: 401 });
         }
 
+        console.log("---------------- LOGIN DEBUG ----------------");
+        console.log("DB'den Gelen Hash:", (userExists as any).password_hash);
+        console.log("Girilen Şifre:", password);
+        console.log("---------------------------------------------");
+
         // Verify password
         const passwordValid = await bcrypt.compare(password, (userExists as any).password_hash);
 
@@ -80,6 +85,7 @@ export async function POST(request: Request) {
             maxAge: 604800,
             path: "/",
         });
+
 
         return response;
     } catch (error: any) {
