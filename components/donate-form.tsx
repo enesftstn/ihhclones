@@ -17,13 +17,13 @@ const fetcher = (url: string) => fetch(url).then(res => res.json())
 
 interface Campaign {
     id: number
-    title_en: string
-    title_tr: string
-    description_en: string
-    description_tr: string
-    target_amount: string
-    current_amount: string
-    image_url: string
+    titleEn: string
+    titleTr: string
+    descriptionEn: string
+    descriptionTr: string
+    targetAmount: string
+    currentAmount: string
+    imageUrl: string
     category: string
 }
 
@@ -88,8 +88,8 @@ export default function DonateForm() {
     // Database Campaign Card Component
     const DbCampaignButton = ({ campaign }: { campaign: Campaign }) => {
         const isSelected = selectedDbCampaign === campaign.id
-        const title = language === "tr" ? campaign.title_tr : campaign.title_en
-        const description = language === "tr" ? campaign.description_tr : campaign.description_en
+        const title = language === "tr" ? campaign.titleTr : campaign.titleEn
+        const description = language === "tr" ? campaign.descriptionTr : campaign.descriptionEn
 
         return (
             <button
@@ -172,10 +172,10 @@ export default function DonateForm() {
     const getSelectedCampaignInfo = () => {
         if (selectedType === "database" && currentDbCampaign) {
             return {
-                title: language === "tr" ? currentDbCampaign.title_tr : currentDbCampaign.title_en,
-                description: language === "tr" ? currentDbCampaign.description_tr : currentDbCampaign.description_en,
+                title: language === "tr" ? currentDbCampaign.titleTr : currentDbCampaign.titleEn,
+                description: language === "tr" ? currentDbCampaign.descriptionTr : currentDbCampaign.descriptionEn,
                 category: currentDbCampaign.category,
-                image: currentDbCampaign.image_url
+                image: currentDbCampaign.imageUrl
             }
         } else if (selectedType === "preset" && currentPresetProduct) {
             return {

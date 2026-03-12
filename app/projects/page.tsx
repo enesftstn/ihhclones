@@ -11,15 +11,15 @@ const fetcher = (url: string) => fetch(url).then(res => res.json())
 
 interface Campaign {
   id: number
-  title_en: string
-  title_tr: string
-  description_en: string
-  description_tr: string
-  target_amount: string
-  current_amount: string
-  image_url: string
+  titleEn: string
+  titleTr: string
+  descriptionEn: string
+  descriptionTr: string
+  targetAmount: string
+  currentAmount: string
+  imageUrl: string
   category: string
-  is_active: boolean
+  isActive: boolean
 }
 
 export default function ProjectsPage() {
@@ -195,17 +195,17 @@ export default function ProjectsPage() {
           {!isLoading && !error && campaigns.length > 0 && (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
               {campaigns.map((campaign) => {
-                const targetAmount = parseFloat(campaign.target_amount || "0")
-                const currentAmount = parseFloat(campaign.current_amount || "0")
+                const targetAmount = parseFloat(campaign.targetAmount || "0")
+                const currentAmount = parseFloat(campaign.currentAmount || "0")
                 const percentage = targetAmount > 0 ? (currentAmount / targetAmount) * 100 : 0
-                const title = language === "tr" ? campaign.title_tr : campaign.title_en
-                const description = language === "tr" ? campaign.description_tr : campaign.description_en
+                const title = language === "tr" ? campaign.titleTr : campaign.titleEn
+                const description = language === "tr" ? campaign.descriptionTr : campaign.descriptionEn
 
                 return (
                   <div key={campaign.id} className="bg-card rounded-lg border overflow-hidden hover:shadow-lg transition-shadow">
-                    {campaign.image_url ? (
+                    {campaign.imageUrl ? (
                       <img 
-                        src={campaign.image_url} 
+                        src={campaign.imageUrl} 
                         alt={title}
                         className="h-48 w-full object-cover"
                       />
