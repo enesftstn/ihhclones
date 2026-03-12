@@ -13,9 +13,17 @@ export async function GET() {
             .orderBy(asc(banners.sortOrder), desc(banners.createdAt));
 
         return NextResponse.json({ banners: allBanners });
-    } catch (error) {
+    } catch (error: unknown) {
+        // If table doesn't exist, return empty array so hero carousel uses fallback slides
+        if (error && typeof error === 'object' && 'cause' in error) {
+            const cause = error.cause as { code?: string };
+            if (cause?.code === 'ER_NO_SUCH_TABLE') {
+                console.log("Banners table not found, using fallback slides");
+                return NextResponse.json({ banners: [] });
+            }
+        }
         console.error("API Error (Banners):", error);
-        return NextResponse.json({ error: "Failed to load banners" }, { status: 500 });
+        return NextResponse.json({ banners: [] });
     }
 }
 
