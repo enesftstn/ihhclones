@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
 
     console.log("--- MIDDLEWARE DEBUG ---");
     console.log("Istek Gelen Yol:", pathname);
-    console.log("Token Mevcut mu?:", !!token);
+    console.log("Token Mevcut mu?:",!token);
 
     console.log("Çerezlerin Tamamý:", request.cookies.getAll());
 
