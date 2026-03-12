@@ -19,7 +19,7 @@ export function SiteFooter() {
                 alt="Ahde Vefa Logo" 
                 width={48} 
                 height={48}
-                className="rounded-full"
+                className="rounded-full w-12 h-12"
               />
               <div className="flex flex-col">
                 <span className="text-lg font-bold">AHDE VEFA</span>
