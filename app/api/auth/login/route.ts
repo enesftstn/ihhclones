@@ -15,7 +15,7 @@ export async function POST(request: Request) {
         const { email, password } = body;
 
         if (!email || !password) {
-            return NextResponse.json({ 
+            return NextResponse.json({
                 error: "Email and password are required",
                 details: { email: !email ? "missing" : "provided", password: !password ? "missing" : "provided" }
             }, { status: 400 });
@@ -62,7 +62,6 @@ export async function POST(request: Request) {
             role: (userExists as any).role 
         })
             .setProtectedHeader({ alg: "HS256" })
-            .setExpirationTime("7d")
             .sign(JWT_SECRET);
 
         const response = NextResponse.json({
