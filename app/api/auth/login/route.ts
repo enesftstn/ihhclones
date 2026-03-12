@@ -67,6 +67,8 @@ export async function POST(request: Request) {
             role: (userExists as any).role 
         })
             .setProtectedHeader({ alg: "HS256" })
+            .setIssuedAt()
+            .setExpirationTime("2h")
             .sign(JWT_SECRET);
 
         const response = NextResponse.json({
@@ -80,7 +82,7 @@ export async function POST(request: Request) {
 
         response.cookies.set("session", token, {
             httpOnly: true,
-            secure: false, //process.env.NODE_ENV === "production",
+            secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
             maxAge: 604800,
             path: "/",

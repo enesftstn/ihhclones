@@ -30,10 +30,9 @@ export async function proxy(request: NextRequest) {
 
             await jwtVerify(token, JWT_SECRET);
             return NextResponse.next();
-        } catch (error) {
-
+        } catch (error: any) {
+            console.error("JWT DOGRULAMA HATASI:", error.message); // Ýþte aradýðýmýz cevap burada!
             const response = NextResponse.redirect(new URL('/admin/login', request.url));
-
             response.cookies.delete('session');
             return response;
         }
