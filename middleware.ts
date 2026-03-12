@@ -8,6 +8,10 @@ export async function middleware(request: NextRequest) {
     const token = request.cookies.get('session')?.value;
     const { pathname } = request.nextUrl;
 
+    console.log("--- MIDDLEWARE DEBUG ---");
+    console.log("Ýstek Gelen Yol:", pathname);
+    console.log("Token Mevcut mu?:", !!token);
+
     if (pathname === '/admin/login' && token) {
         try {
             await jwtVerify(token, JWT_SECRET);
