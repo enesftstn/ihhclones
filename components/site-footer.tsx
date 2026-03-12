@@ -1,8 +1,9 @@
 "use client"
 
-import { Heart, Facebook, Twitter, Instagram, Youtube } from "lucide-react"
+import { Facebook, Twitter, Instagram, Youtube } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import Link from "next/link"
+import Image from "next/image"
 
 export function SiteFooter() {
   const { t, language } = useLanguage()
@@ -12,14 +13,23 @@ export function SiteFooter() {
       <div className="container mx-auto px-4 py-12">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div>
-            <div className="mb-4 flex items-center gap-2">
-              <Heart className="h-8 w-8 text-accent fill-accent" />
-              <span className="text-xl font-bold">Hope Relief</span>
+            <div className="mb-4 flex items-center gap-3">
+              <Image 
+                src="/images/logo.png" 
+                alt="Ahde Vefa Logo" 
+                width={48} 
+                height={48}
+                className="rounded-full w-12 h-12"
+              />
+              <div className="flex flex-col">
+                <span className="text-lg font-bold">AHDE VEFA</span>
+                <span className="text-xs text-muted-foreground">Sosyal Yardımlaşma ve Dayanışma Derneği</span>
+              </div>
             </div>
             <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
               {language === "tr"
-                ? "1992'den beri dünya çapında ihtiyaç içindeki topluluklara insani yardım ve kalkınma programları sağlıyoruz."
-                : "Providing humanitarian aid and development programs to communities in need worldwide since 1992."}
+                ? "İhtiyaç içindeki topluluklara insani yardım ve kalkınma programları sağlıyoruz."
+                : "Providing humanitarian aid and development programs to communities in need."}
             </p>
             <div className="flex gap-3">
               <a
@@ -134,7 +144,7 @@ export function SiteFooter() {
 
         <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
           <p>
-            © 2025 Hope Relief Foundation. {t("footer.rights")} |{" "}
+            © 2025 Ahde Vefa Derneği. {t("footer.rights")} |{" "}
             <Link href="/privacy" className="hover:text-accent transition-colors">
               {language === "tr" ? "Gizlilik Politikası" : "Privacy Policy"}
             </Link>{" "}
