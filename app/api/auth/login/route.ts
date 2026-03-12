@@ -80,7 +80,7 @@ export async function POST(request: Request) {
 
         response.cookies.set("session", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
+            secure: false, //process.env.NODE_ENV === "production",
             sameSite: "lax",
             maxAge: 604800,
             path: "/",
