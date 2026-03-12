@@ -4,7 +4,7 @@ import { jwtVerify } from 'jose';
 
 const JWT_SECRET = new TextEncoder().encode("cok_gizli_ve_uzun_bir_key_123");
 
-export async function middleware(request: NextRequest) { 
+export async function proxy(request: NextRequest) { 
     const token = request.cookies.get('session')?.value;
     const { pathname } = request.nextUrl;
 
@@ -12,7 +12,7 @@ export async function middleware(request: NextRequest) {
     console.log("Istek Gelen Yol:", pathname);
     console.log("Token Mevcut mu?:",!token);
 
-    console.log("Cerezlerin Tamamý:", request.cookies.getAll());
+    console.log("Cerezlerin Tamami:", request.cookies.getAll());
 
     if (pathname === '/admin/login' && token) {
         try {
