@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/request';
 import { jwtVerify } from 'jose';
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
+const JWT_SECRET = new TextEncoder().encode("cok_gizli_ve_uzun_bir_key_123");
 
 
 export async function proxy(request: NextRequest) {

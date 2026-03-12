@@ -7,7 +7,8 @@ if (!process.env.JWT_SECRET) {
     console.warn("⚠️ KRİTİK UYARI: JWT_SECRET ortam değişkeni tanımlı değil! 'default_secret_key' kullanılıyor.");
 }
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
+//const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
+const JWT_SECRET = new TextEncoder().encode("cok_gizli_ve_uzun_bir_key_123");
 
 export async function POST(request: Request) {
     try {
