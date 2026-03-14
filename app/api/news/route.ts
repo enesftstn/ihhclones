@@ -18,14 +18,14 @@ export async function GET(request: Request) {
             news = await query(
                 `SELECT * FROM news 
                  WHERE category = ?
-                 ORDER BY published_at DESC, created_at DESC LIMIT ?`,
-                [category, limit]
+                 ORDER BY published_at DESC, created_at DESC LIMIT ${limit}`,
+                [category]
             )
         } else {
             news = await query(
                 `SELECT * FROM news 
-                 ORDER BY published_at DESC, created_at DESC LIMIT ?`,
-                [limit]
+                 ORDER BY published_at DESC, created_at DESC LIMIT ${limit}`,
+                []
             )
         }
 

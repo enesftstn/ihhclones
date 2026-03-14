@@ -20,8 +20,8 @@ export async function GET(request: Request) {
             )
         } else {
             stories = await query(
-                `SELECT * FROM impact_stories ORDER BY created_at DESC LIMIT ?`,
-                [limit]
+                `SELECT * FROM impact_stories ORDER BY created_at DESC LIMIT ${limit}`,
+                []
             )
         }
 
