@@ -18,16 +18,16 @@ import Image from "next/image"
 
 interface Campaign {
     id: number
-    title_en: string
-    title_tr: string
-    description_en: string
-    description_tr: string
-    target_amount: string
-    current_amount: string
-    image_url: string
+    titleEn: string
+    titleTr: string
+    descriptionEn: string
+    descriptionTr: string
+    targetAmount: string
+    currentAmount: string
+    imageUrl: string
     category: string
-    is_active: boolean
-    created_at: string
+    isActive: boolean
+    createdAt: string
 }
 
 export default function AdminCampaignsPage() {
