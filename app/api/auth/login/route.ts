@@ -7,7 +7,8 @@ if (!process.env.JWT_SECRET) {
     console.warn("⚠️ KRİTİK UYARI: JWT_SECRET ortam değişkeni tanımlı değil! 'default_secret_key' kullanılıyor.");
 }
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
+//const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret_key");
+const JWT_SECRET = new TextEncoder().encode("cok_gizli_ve_uzun_bir_key_123");
 
 export async function POST(request: Request) {
     try {
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
         const { email, password } = body;
 
         if (!email || !password) {
-            return NextResponse.json({ 
+            return NextResponse.json({
                 error: "Email and password are required",
                 details: { email: !email ? "missing" : "provided", password: !password ? "missing" : "provided" }
             }, { status: 400 });
@@ -42,6 +43,11 @@ export async function POST(request: Request) {
             }, { status: 401 });
         }
 
+        console.log("---------------- LOGIN DEBUG ----------------");
+        console.log("DB'den Gelen Hash:", (userExists as any).password_hash);
+        console.log("Girilen Şifre:", password);
+        console.log("---------------------------------------------");
+
         // Verify password
         const passwordValid = await bcrypt.compare(password, (userExists as any).password_hash);
 
@@ -62,7 +68,8 @@ export async function POST(request: Request) {
             role: (userExists as any).role 
         })
             .setProtectedHeader({ alg: "HS256" })
-            .setExpirationTime("7d")
+            .setIssuedAt()
+            .setExpirationTime("2h")
             .sign(JWT_SECRET);
 
         const response = NextResponse.json({
@@ -81,6 +88,7 @@ export async function POST(request: Request) {
             maxAge: 604800,
             path: "/",
         });
+
 
         return response;
     } catch (error: any) {
