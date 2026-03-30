@@ -119,7 +119,7 @@ const translations = {
     "footer.emailPlaceholder": "Enter your email",
     "footer.subscribe": "Subscribe",
     "footer.rights": "All rights reserved.",
-    "footer.charity": "Hope Relief Foundation is a registered 501(c)(3) nonprofit organization.",
+    "footer.charity": "Ahde Vefa Social Solidarity and Assistance Association is a registered non-profit organization.",
   },
   tr: {
     // Header
@@ -141,7 +141,7 @@ const translations = {
 
     // Campaigns
     "campaigns.title": "Yardım Yolları",
-    "campaigns.subtitle": "Bağışınız insanların hayatlarında gerçek bir fark yaratıyor",
+    "campaigns.subtitle": "Bağışınız insanların hayatlarında gerçek bir fark yarat��yor",
     "campaigns.palestine": "Filistin Yardımı",
     "campaigns.palestineDesc": "Aileler için acil yardım",
     "campaigns.cataract": "Katarakt Ameliyatı",
@@ -225,8 +225,8 @@ const translations = {
     "footer.newsletterText": "İnsani yardım çalışmalarımız hakkında güncellemeler alın",
     "footer.emailPlaceholder": "E-posta adresinizi girin",
     "footer.subscribe": "Abone Ol",
-    "footer.rights": "Tüm hakları saklıdır.",
-    "footer.charity": "Umut Yardım Vakfı, kayıtlı bir kâr amacı gütmeyen kuruluştur.",
+    "footer.rights": "Tum haklari saklidir.",
+    "footer.charity": "Ahde Vefa Sosyal Yardimlasma ve Dayanisma Dernegi, kayitli bir kar amaci gutmeyen kurulustur.",
   },
 }
 
