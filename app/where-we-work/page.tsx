@@ -125,6 +125,30 @@ export default function WhereWeWorkPage() {
         </div>
       </div>
 
+      {/* Work in Action */}
+      <div className="container mx-auto px-4 pb-16">
+        <h2 className="text-3xl font-bold text-foreground text-center mb-8">
+          {language === "en" ? "Our Work in Action" : "Çalışmalarımızdan Kareler"}
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
+          <img
+            src="/ahde-vefa-somalia-distribution.png"
+            alt="Food distribution in Somalia"
+            className="rounded-lg object-cover w-full h-48 col-span-2"
+          />
+          <img
+            src="/ahde-vefa-cataract-surgery.png"
+            alt="Cataract surgery program"
+            className="rounded-lg object-cover w-full h-48"
+          />
+          <img
+            src="/ahde-vefa-qurban-somalia.png"
+            alt="Qurban organization in Somalia"
+            className="rounded-lg object-cover w-full h-48"
+          />
+        </div>
+      </div>
+
       {/* Regions */}
       <div className="bg-muted/30 py-16">
         <div className="container mx-auto px-4">

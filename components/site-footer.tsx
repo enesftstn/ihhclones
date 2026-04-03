@@ -14,10 +14,10 @@ export function SiteFooter() {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <div className="mb-4 flex items-center gap-3">
-              <Image 
-                src="/images/logo.png" 
-                alt="Ahde Vefa Logo" 
-                width={48} 
+              <Image
+                src="/images/logo.png"
+                alt="Ahde Vefa Logo"
+                width={48}
                 height={48}
                 className="rounded-full w-12 h-12"
               />
@@ -134,10 +134,10 @@ export function SiteFooter() {
           <div>
             <h3 className="mb-4 text-lg font-bold text-foreground">{t("footer.contact")}</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>{language === "tr" ? "E-posta" : "Email"}: info@hoperelief.org</li>
-              <li>{language === "tr" ? "Telefon" : "Phone"}: +1 (555) 123-4567</li>
-              <li>{language === "tr" ? "Adres" : "Address"}: 123 Charity Lane</li>
-              <li>New York, NY 10001</li>
+              <li>{language === "tr" ? "E-posta" : "Email"}: ---------------------</li>
+              <li>{language === "tr" ? "Telefon" : "Phone"}: +90 507 880 06 41</li>
+              <li>{language === "tr" ? "Adres" : "Address"}: Doğan, 6. Sk. No:1</li>
+              <li> 41100, İzmit/Kocaeli</li>
             </ul>
           </div>
         </div>
