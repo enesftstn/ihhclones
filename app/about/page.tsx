@@ -135,12 +135,38 @@ export default function AboutPage() {
 
       {/* About Us */}
       <div className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-foreground mb-6">{t.aboutUs.title}</h2>
-          <div className="space-y-4">
-            <p className="text-muted-foreground text-lg leading-relaxed">{t.aboutUs.text}</p>
-            <p className="text-muted-foreground text-lg leading-relaxed">{t.aboutUs.text2}</p>
-            <p className="text-muted-foreground text-lg leading-relaxed">{t.aboutUs.text3}</p>
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl font-bold text-foreground mb-6">{t.aboutUs.title}</h2>
+              <div className="space-y-4">
+                <p className="text-muted-foreground text-lg leading-relaxed">{t.aboutUs.text}</p>
+                <p className="text-muted-foreground text-lg leading-relaxed">{t.aboutUs.text2}</p>
+                <p className="text-muted-foreground text-lg leading-relaxed">{t.aboutUs.text3}</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <img
+                src="/ahde-vefa-volunteer-boxes.jpg"
+                alt="Ahde Vefa volunteers preparing aid boxes"
+                className="rounded-lg object-cover w-full h-48"
+              />
+              <img
+                src="/ahde-vefa-team-meeting.jpg"
+                alt="Ahde Vefa team meeting"
+                className="rounded-lg object-cover w-full h-48"
+              />
+              <img
+                src="/ahde-vefa-volunteer-back.jpg"
+                alt="Ahde Vefa volunteer with branded vest"
+                className="rounded-lg object-cover w-full h-48"
+              />
+              <img
+                src="/ahde-vefa-green-boxes.jpg"
+                alt="Ahde Vefa aid packages"
+                className="rounded-lg object-cover w-full h-48"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -189,6 +215,52 @@ export default function AboutPage() {
                 <div className="text-muted-foreground">{stat.label}</div>
               </div>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Our Work Gallery */}
+      <div className="py-16">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-foreground text-center mb-12">
+            {language === "en" ? "Our Work in Action" : "Calismalarimiz"}
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
+            <img
+              src="/ahde-vefa-somalia-distribution.png"
+              alt="Food distribution in Somalia"
+              className="rounded-lg object-cover w-full h-48 col-span-2"
+            />
+            <img
+              src="/ahde-vefa-cataract-surgery.png"
+              alt="Cataract surgery program in Somalia"
+              className="rounded-lg object-cover w-full h-48"
+            />
+            <img
+              src="/ahde-vefa-cataract-patient.png"
+              alt="Cataract surgery patient"
+              className="rounded-lg object-cover w-full h-48"
+            />
+            <img
+              src="/ahde-vefa-stacked-boxes.jpg"
+              alt="Aid boxes ready for distribution"
+              className="rounded-lg object-cover w-full h-48"
+            />
+            <img
+              src="/ahde-vefa-delivery-boxes.jpg"
+              alt="Aid packages delivered to families"
+              className="rounded-lg object-cover w-full h-48"
+            />
+            <img
+              src="/ahde-vefa-home-delivery.jpg"
+              alt="Home delivery of aid packages"
+              className="rounded-lg object-cover w-full h-48"
+            />
+            <img
+              src="/ahde-vefa-volunteer-vest.jpg"
+              alt="Ahde Vefa volunteer"
+              className="rounded-lg object-cover w-full h-48"
+            />
           </div>
         </div>
       </div>

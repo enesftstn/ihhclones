@@ -238,6 +238,32 @@ export default function GetInvolvedPage() {
         </div>
       </div>
 
+      {/* Volunteers in Action */}
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
+          <img
+            src="/ahde-vefa-volunteer-boxes.jpg"
+            alt="Volunteer preparing aid boxes"
+            className="rounded-lg object-cover w-full h-48"
+          />
+          <img
+            src="/ahde-vefa-volunteer-back.jpg"
+            alt="Volunteer organizing boxes"
+            className="rounded-lg object-cover w-full h-48"
+          />
+          <img
+            src="/ahde-vefa-volunteer-vest.jpg"
+            alt="Volunteer wearing Ahde Vefa vest"
+            className="rounded-lg object-cover w-full h-48"
+          />
+          <img
+            src="/ahde-vefa-team-meeting.jpg"
+            alt="Team meeting"
+            className="rounded-lg object-cover w-full h-48"
+          />
+        </div>
+      </div>
+
       {/* Ways to Help */}
       <div className="container mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
