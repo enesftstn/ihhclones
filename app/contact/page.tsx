@@ -55,7 +55,7 @@ export default function ContactPage() {
         email: "Email Address",
         emailPlaceholder: "john@example.com",
         phone: "Phone Number",
-        phonePlaceholder: "+1 (555) 123-4567",
+        phonePlaceholder: "+90 5xx xxx xx xx",
         subject: "Subject",
         subjectPlaceholder: "How can we help you?",
         message: "Message",
@@ -68,15 +68,15 @@ export default function ContactPage() {
         title: "Contact Information",
         email: {
           label: "Email",
-          value: "info@hoperelief.org",
+          value: "-----------------",
         },
         phone: {
           label: "Phone",
-          value: "+1 (555) 123-4567",
+          value: "+90 507 880 06 41",
         },
         address: {
           label: "Address",
-          value: "123 Humanitarian Way, Suite 100, New York, NY 10001, USA",
+          value: "Doğan, 6. Sk. No:1, 41100 İzmit/Kocaeli",
         },
         hours: {
           label: "Office Hours",
@@ -87,22 +87,10 @@ export default function ContactPage() {
         title: "Our Offices",
         list: [
           {
-            city: "New York",
-            country: "USA",
-            address: "123 Humanitarian Way, NY 10001",
-            phone: "+1 (555) 123-4567",
-          },
-          {
-            city: "Istanbul",
+            city: "Kocaeli",
             country: "Turkey",
-            address: "Şişli, İstanbul, 34360",
-            phone: "+90 (212) 123-4567",
-          },
-          {
-            city: "London",
-            country: "UK",
-            address: "456 Relief Street, London, SW1A 1AA",
-            phone: "+44 (20) 1234-5678",
+            address: "Doğan, 6. Sk. No:1, 41100 İzmit/Kocaeli",
+            phone: "+90 507 880 06 41",
           },
         ],
       },
@@ -130,15 +118,15 @@ export default function ContactPage() {
         title: "İletişim Bilgileri",
         email: {
           label: "E-posta",
-          value: "bilgi@umutyardim.org",
+          value: "------------------------",
         },
         phone: {
           label: "Telefon",
-          value: "+90 (212) 123-4567",
+          value: "+90 507 880 06 41",
         },
         address: {
           label: "Adres",
-          value: "Şişli Mahallesi, Yardım Sokak No: 123, İstanbul, 34360",
+          value: "Doğan, 6. Sk. No:1, 41100 İzmit/Kocaeli",
         },
         hours: {
           label: "Çalışma Saatleri",
@@ -149,22 +137,10 @@ export default function ContactPage() {
         title: "Ofislerimiz",
         list: [
           {
-            city: "New York",
-            country: "ABD",
-            address: "123 Humanitarian Way, NY 10001",
-            phone: "+1 (555) 123-4567",
-          },
-          {
-            city: "İstanbul",
+            city: "Kocaeli",
             country: "Türkiye",
-            address: "Şişli, İstanbul, 34360",
-            phone: "+90 (212) 123-4567",
-          },
-          {
-            city: "Londra",
-            country: "İngiltere",
-            address: "456 Relief Street, London, SW1A 1AA",
-            phone: "+44 (20) 1234-5678",
+            address: "Doğan, 6. Sk. No:1, 41100 İzmit/Kocaeli",
+            phone: "+90 507 880 06 41",
           },
         ],
       },
