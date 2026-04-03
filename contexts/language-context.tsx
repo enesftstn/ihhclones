@@ -225,8 +225,8 @@ const translations = {
     "footer.newsletterText": "İnsani yardım çalışmalarımız hakkında güncellemeler alın",
     "footer.emailPlaceholder": "E-posta adresinizi girin",
     "footer.subscribe": "Abone Ol",
-    "footer.rights": "Tum haklari saklidir.",
-    "footer.charity": "Ahde Vefa Sosyal Yardimlasma ve Dayanisma Dernegi, kayitli bir kar amaci gutmeyen kurulustur.",
+    "footer.rights": "Tüm hakları saklıdır.",
+    "footer.charity": "Ahde Vefa Sosyal Yardımlaşma ve Dayanışma Derneği, kayıtlı bir kâr amacı gütmeyen kuruluştur.",
   },
 }
 

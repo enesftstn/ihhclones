@@ -63,47 +63,47 @@ export default function AboutPage() {
       },
     },
     tr: {
-      title: "Ahde Vefa Hakkinda",
-      subtitle: "Sosyal Yardimlasma ve Dayanisma Dernegi",
+      title: "Ahde Vefa Hakkında",
+      subtitle: "Sosyal Yardımlaşma ve Dayanışma Derneği",
       aboutUs: {
-        title: "Hakkimizda",
-        text: "Ahde Vefa Sosyal Yardimlasma ve Dayanisma Dernegi, toplumsal dayanismayi guclendirmek, ihtiyac sahiplerine umut olmak ve yardimlasma kulturunu yayginlastirmak amaciyla kurulmus bir sivil toplum kurulusudur. Kurdugumuz gunden bu yana; insan onurunu esas alan, adalet, merhamet ve paylasma degerlerini merkezine koyan bir anlayisla faaliyetlerimizi surdurmekteyiz. Toplumun farkli kesimlerinde yasayan ihtiyac sahiplerine ulasarak, onlarin hayatlarina dokunmayi ve yasam kosullarini iyilestirmeyi hedefliyoruz.",
-        text2: "Dernegimiz; gida, giyim, barinma, egitim ve saglik basta olmak uzere temel insani ihtiyaclarin karsilanmasina yonelik calismalar yurutmekte, yetim, oksuz, yasli ve dezavantajli bireylerin yaninda olmaktadir. Ayni zamanda sosyal sorumluluk projeleri, egitim destekleri ve farkindalik calismalari ile kalici cozumler uretmeyi amaclamaktadir.",
-        text3: "Sadece anlik yardimlar sunmakla kalmayip, surdurulebilir projeler gelistirerek bireylerin kendi ayaklari uzerinde durabilmelerine katki saglamayi onemsiyoruz. Bu dogrultuda, bagisclarimiz ile ihtiyac sahipleri arasinda guvenilir bir kopru gorevi ustleniyor; seffaf, hesap verebilir ve etkin bir yonetim anlayisi ile hareket ediyoruz.",
+        title: "Hakkımızda",
+        text: "Ahde Vefa Sosyal Yardımlaşma ve Dayanışma Derneği, toplumsal dayanışmayı güçlendirmek, ihtiyaç sahiplerine umut olmak ve yardımlaşma kültürünü yaygınlaştırmak amacıyla kurulmuş bir sivil toplum kuruluşudur. Kurduğumuz günden bu yana; insan onurunu esas alan, adalet, merhamet ve paylaşma değerlerini merkezine koyan bir anlayışla faaliyetlerimizi sürdürmekteyiz. Toplumun farklı kesimlerinde yaşayan ihtiyaç sahiplerine ulaşarak, onların hayatlarına dokunmayı ve yaşam koşullarını iyileştirmeyi hedefliyoruz.",
+        text2: "Derneğimiz; gıda, giyim, barınma, eğitim ve sağlık başta olmak üzere temel insani ihtiyaçların karşılanmasına yönelik çalışmalar yürütmekte, yetim, öksüz, yaşlı ve dezavantajlı bireylerin yanında olmaktadır. Aynı zamanda sosyal sorumluluk projeleri, eğitim destekleri ve farkındalık çalışmaları ile kalıcı çözümler üretmeyi amaçlamaktadır.",
+        text3: "Sadece anlık yardımlar sunmakla kalmayıp, sürdürülebilir projeler geliştirerek bireylerin kendi ayakları üzerinde durabilmelerine katkı sağlamayı önemsiyoruz. Bu doğrultuda, bağışçılarımız ile ihtiyaç sahipleri arasında güvenilir bir köprü görevi üstleniyor; şeffaf, hesap verebilir ve etkin bir yönetim anlayışı ile hareket ediyoruz.",
       },
       vision: {
         title: "Vizyonumuz",
-        text: "Ahde Vefa Sosyal Yardimlasma ve Dayanisma Dernegi olarak vizyonumuz; insan onurunu esas alan, adalet, merhamet ve dayanisma ilkeleri dogrultusunda hareket eden, toplumsal refahin artirilmasina katki saglayan oncu ve ornek bir sivil toplum kurulusu olmaktir.",
-        text2: "Yerel duzeyde baslattigimiz iyilik hareketini ulusal ve uluslararasi platformlara tasiyarak; ihtiyac sahiplerine ulasmada etkin, seffaf ve surdurulebilir bir model gelistiren, sosyal sorumluluk projeleriyle fark olusturan, guvenirliligi ve sayginligi ile one cikan bir yapi haline gelmeyi hedefliyoruz.",
-        text3: "Toplumun her kesimini kapsayan, ayrim gozetmeksizin yardimlasma kulturunu yayginlastiran, gonulluluk bilincini artiran ve gelecek nesillere daha yasanabilir bir dunya birakmayi amaclayan bir anlayisla hareket ediyoruz.",
+        text: "Ahde Vefa Sosyal Yardımlaşma ve Dayanışma Derneği olarak vizyonumuz; insan onurunu esas alan, adalet, merhamet ve dayanışma ilkeleri doğrultusunda hareket eden, toplumsal refahın artırılmasına katkı sağlayan öncü ve örnek bir sivil toplum kuruluşu olmaktır.",
+        text2: "Yerel düzeyde başlattığımız iyilik hareketini ulusal ve uluslararası platformlara taşıyarak; ihtiyaç sahiplerine ulaşmada etkin, şeffaf ve sürdürülebilir bir model geliştiren, sosyal sorumluluk projeleriyle fark oluşturan, güvenilirliği ve saygınlığı ile öne çıkan bir yapı haline gelmeyi hedefliyoruz.",
+        text3: "Toplumun her kesimini kapsayan, ayrım gözetmeksizin yardımlaşma kültürünü yaygınlaştıran, gönüllülük bilincini artıran ve gelecek nesillere daha yaşanabilir bir dünya bırakmayı amaçlayan bir anlayışla hareket ediyoruz.",
       },
       values: {
-        title: "Degerlerimiz",
+        title: "Değerlerimiz",
         items: [
           {
             icon: Heart,
-            title: "Insan Odaklilik",
-            desc: "Her bireyin onurlu bir yasam hakkina sahip olduguna inaniriz.",
+            title: "İnsan Odaklılık",
+            desc: "Her bireyin onurlu bir yaşam hakkına sahip olduğuna inanırız.",
           },
           {
             icon: Shield,
-            title: "Seffaflik ve Guven",
-            desc: "Tum faaliyetlerimizde acik, durust ve hesap verebiliriz.",
+            title: "Şeffaflık ve Güven",
+            desc: "Tüm faaliyetlerimizde açık, dürüst ve hesap verebiliriz.",
           },
           {
             icon: Users,
-            title: "Dayanisma",
-            desc: "Birlikte hareket ederek daha guclu bir toplum olustururuz.",
+            title: "Dayanışma",
+            desc: "Birlikte hareket ederek daha güçlü bir toplum oluştururuz.",
           },
           {
             icon: Leaf,
-            title: "Surdurulebilirlik",
-            desc: "Kalici ve etkili cozumler uretmeyi hedefleriz.",
+            title: "Sürdürülebilirlik",
+            desc: "Kalıcı ve etkili çözümler üretmeyi hedefleriz.",
           },
           {
             icon: HandHeart,
-            title: "Gonulluluk",
-            desc: "Iyiligin yayilmasinda gonullu gucune inaniriz.",
+            title: "Gönüllülük",
+            desc: "İyiliğin yayılmasında gönüllü gücüne inanırız.",
           },
         ],
       },
@@ -111,8 +111,8 @@ export default function AboutPage() {
         title: "Etkimiz",
         items: [
           { number: "1000+", label: "Desteklenen Aile" },
-          { number: "500+", label: "Degisen Hayat" },
-          { number: "100+", label: "Aktif Gonullu" },
+          { number: "500+", label: "Değişen Hayat" },
+          { number: "100+", label: "Aktif Gönüllü" },
           { number: "50+", label: "Tamamlanan Proje" },
         ],
       },
@@ -223,7 +223,7 @@ export default function AboutPage() {
       <div className="py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-foreground text-center mb-12">
-            {language === "en" ? "Our Work in Action" : "Calismalarimiz"}
+            {language === "en" ? "Our Work in Action" : "Çalışmalarımız"}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
             <img

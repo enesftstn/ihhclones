@@ -56,49 +56,49 @@ export default function MissionPage() {
     },
     tr: {
       title: "Misyonumuz",
-      subtitle: "Ihtiyac icindeki insanlara umut ve yardim goturmek",
-      missionIntro: "Ahde Vefa Sosyal Yardimlasma ve Dayanisma Dernegi olarak misyonumuz; ihtiyac sahibi birey ve ailelerin yasam kosullarini iyilestirmek, sosyal adaleti desteklemek ve toplumda kalici bir dayanisma kulturu olusturmak amaciyla etkin, planli ve surdurulebilir calismalar yurutmektir.",
+      subtitle: "İhtiyaç içindeki insanlara umut ve yardım götürmek",
+      missionIntro: "Ahde Vefa Sosyal Yardımlaşma ve Dayanışma Derneği olarak misyonumuz; ihtiyaç sahibi birey ve ailelerin yaşam koşullarını iyileştirmek, sosyal adaleti desteklemek ve toplumda kalıcı bir dayanışma kültürü oluşturmak amacıyla etkin, planlı ve sürdürülebilir çalışmalar yürütmektir.",
       missionAreas: {
-        title: "Bu dogrultuda;",
+        title: "Bu doğrultuda;",
         items: [
           {
             icon: Heart,
-            title: "Temel Insani Yardimlar",
-            desc: "Gida, giyim, barinma ve saglik gibi temel ihtiyaclarin karsilanmasina yonelik destekler saglamak.",
+            title: "Temel İnsani Yardımlar",
+            desc: "Gıda, giyim, barınma ve sağlık gibi temel ihtiyaçların karşılanmasına yönelik destekler sağlamak.",
           },
           {
             icon: GraduationCap,
-            title: "Egitim ve Gelecek Destekleri",
-            desc: "Ogrencilere burs imkani sunmak, egitim materyalleri temin etmek ve genclerin gelecegine katki saglayacak projeler gelistirmek.",
+            title: "Eğitim ve Gelecek Destekleri",
+            desc: "Öğrencilere burs imkânı sunmak, eğitim materyalleri temin etmek ve gençlerin geleceğine katkı sağlayacak projeler geliştirmek.",
           },
           {
             icon: Users,
             title: "Sosyal Sorumluluk Projeleri",
-            desc: "Yetim, oksuz, yasli ve dezavantajli bireylerin hayat standartlarini yukseltmeye yonelik faaliyetler gerceklestirmek.",
+            desc: "Yetim, öksüz, yaşlı ve dezavantajlı bireylerin hayat standartlarını yükseltmeye yönelik faaliyetler gerçekleştirmek.",
           },
           {
             icon: AlertTriangle,
-            title: "Acil Yardim ve Kriz Yonetimi",
-            desc: "Dogal afetler, savaslar ve olaganustu durumlarda hizli, organize ve etkili yardim calismalari yurutmek.",
+            title: "Acil Yardım ve Kriz Yönetimi",
+            desc: "Doğal afetler, savaşlar ve olağanüstü durumlarda hızlı, organize ve etkili yardım çalışmaları yürütmek.",
           },
           {
             icon: Megaphone,
-            title: "Toplumsal Dayanisma ve Bilinclendirme",
-            desc: "Yardimlasma ve paylasma kulturunu yayginlastirmak, gonulluluk bilincini artirmak ve toplumsal farkindalik olusturmak.",
+            title: "Toplumsal Dayanışma ve Bilinçlendirme",
+            desc: "Yardımlaşma ve paylaşma kültürünü yaygınlaştırmak, gönüllülük bilincini artırmak ve toplumsal farkındalık oluşturmak.",
           },
           {
             icon: Shield,
-            title: "Seffaflik ve Guven",
-            desc: "Bagiscilarin emanetlerini en dogru sekilde degerlendirerek, hesap verebilir ve guvenilir bir yonetim anlayisi benimsemek.",
+            title: "Şeffaflık ve Güven",
+            desc: "Bağışçıların emanetlerini en doğru şekilde değerlendirerek, hesap verebilir ve güvenilir bir yönetim anlayışı benimsemek.",
           },
           {
             icon: Sprout,
-            title: "Surdurulebilir Kalkinma Yaklasimi",
-            desc: "Sadece anlik yardimlar degil, kalici cozumler ureterek bireylerin kendi ayaklari uzerinde durabilmelerine katki saglamak.",
+            title: "Sürdürülebilir Kalkınma Yaklaşımı",
+            desc: "Sadece anlık yardımlar değil, kalıcı çözümler üreterek bireylerin kendi ayakları üzerinde durabilmelerine katkı sağlamak.",
           },
         ],
       },
-      conclusion: "Insani merkeze alan, deger odakli ve cozum ureten yaklasimimizla; iyiligi buyutmeyi, umudu cogaltmayi ve toplumda kalici bir etki birakmayi amacliyoruz.",
+      conclusion: "İnsanı merkeze alan, değer odaklı ve çözüm üreten yaklaşımımızla; iyiliği büyütmeyi, umudu çoğaltmayı ve toplumda kalıcı bir etki bırakmayı amaçlıyoruz.",
     },
   }
 

@@ -128,7 +128,7 @@ export default function WhereWeWorkPage() {
       {/* Work in Action */}
       <div className="container mx-auto px-4 pb-16">
         <h2 className="text-3xl font-bold text-foreground text-center mb-8">
-          {language === "en" ? "Our Work in Action" : "Calismalarimizdan Kareler"}
+          {language === "en" ? "Our Work in Action" : "Çalışmalarımızdan Kareler"}
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
           <img
