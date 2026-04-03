@@ -1,7 +1,7 @@
 import { cookies } from "next/headers"
 import { jwtVerify } from "jose"
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "change-this-in-production")
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "cok_gizli_ve_uzun_bir_key_123")
 
 export async function getSession() {
   const cookieStore = await cookies()
